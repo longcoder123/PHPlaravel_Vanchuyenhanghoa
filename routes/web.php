@@ -24,6 +24,7 @@ Route::post('/update-xe/{vehicle_id}', [VehicleController::class, 'update'])->na
 Route::get('/delete-xe/{vehicle_id}', [VehicleController::class,'delete'])->name('xoaxe');
 
 Route::get('/',[HomeController::class,'layoutHome'])->name('home');
+Route::get('/infor',[HomeController::class,'layoutInfor'])->name('infor');
 //quản lý nhân viên
 // Route::get('/qlynv', [DriverController::class, 'qlnv'])->name('qlynv');Route::get('/', function () {
 //     // layouts.user.header
