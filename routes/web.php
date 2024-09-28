@@ -34,3 +34,4 @@ Route::get('/infor',[HomeController::class,'layoutInfor'])->name('infor');
 //     // layouts.user.header
 //     return view('layouts.layoutMain.userPage.customerInformation');
 // });
+Route::post('/calculate-shipping-cost', [HomeController::class, 'calculate'])->name('calculateShippingCost');

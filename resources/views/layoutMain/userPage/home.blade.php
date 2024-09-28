@@ -111,7 +111,7 @@
           <div class="custom-rounded p-4 border col-2 d-flex justify-content-center flex-wrap"><i class="col-12 text-center p-2 fs-2 fa-solid fa-tape"></i><p>Đóng gói hàng của bạn</p> </div>
           <div class="custom-rounded p-4 border col-2 d-flex justify-content-center flex-wrap"><i class="col-12 text-center p-2 fs-2 fa-solid fa-box-open"></i><p>Gửi cái gì</p> </div>
           <div class="custom-rounded p-4 border col-2 d-flex justify-content-center flex-wrap"><i class="col-12 text-center p-2 fs-2 fa-solid fa-file-invoice"></i><p>Về giá cả</p> </div>
-          <div class="custom-rounded p-4 border col-2 d-flex justify-content-center flex-wrap"><i class="col-12 text-center p-2 fs-2 fa-solid fa-dolly"></iclass=>  </i><p>Đóng gói ngay</p> </div>
+          <a href="{{ route('infor') }}" class="text-white text-decoration-none custom-rounded p-4 border col-2 d-flex justify-content-center flex-wrap"><i class="col-12 text-center p-2 fs-2 fa-solid fa-dolly"></iclass=>  </i><p>Đóng gói ngay</p> </a>
          </div>
         </div>
 
