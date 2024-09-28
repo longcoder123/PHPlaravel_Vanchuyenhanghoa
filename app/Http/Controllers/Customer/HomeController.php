@@ -48,5 +48,7 @@ class HomeController extends Controller
 
         // Trả về kết quả tính toán
         return view('layoutMain.userPage.result', ['cost' => $cost]);
+        //giả sử code
+        $cost = 1;
     }
 }
