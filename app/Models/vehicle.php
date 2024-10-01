@@ -13,4 +13,5 @@ class vehicle extends Model
 
     protected $primaryKey = 'vehicle_id'; // Khóa chính là 'vehicle_id'
     public $incrementing = false; // Nếu 'vehicle_id' không phải là auto-increment
+    
 }

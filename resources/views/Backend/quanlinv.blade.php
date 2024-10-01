@@ -27,8 +27,8 @@
             <div class="order">
                 <div class="head">
                     <h3>Quản lý nhân viên</h3>
-                    <a href="{{route('themxe')}}"
-                    class="btn btn-primary float-end">Thêm NV</a>
+                    <a href="{{route('themnv')}}"
+                    class="btn btn-primary float-end" > <i class='bx bx-plus-circle' ></i></a>
                   
                 </div>
                 <table>
@@ -46,22 +46,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                      
+                      @foreach ($driver as $dr)
                           <tr>
-                              <td><img src="">
-                                <p>Tên</p></td>
-                              <td>SDT</td>
-                              <td>Email</td>
-                              <td>CCCD</td>
-                              <td>1</td>
-                              <td></td>  <!-- Hiển thị trạng thái xe -->
-                              {{-- <td>{{$sp->driver_id ->name}}</td>              --}}
+                              <td><img src="{{asset('Uploads/admin/' .$dr ->driver_image )}}">
+                                <p>{{$dr->name}}</p></td>
+                              <td>{{$dr->phone}}</td>
+                              <td>{{$dr->email}}</td>
+                              <td>{{$dr->license_number}}</td>                        
+                              <td>{{$dr->status}}</td> 
+                              <td>{{ $dr->vehicle ? $dr->vehicle->license_plate : 'Chưa có xe' }}</td>
+                             
                               <td>
-                                  <a href="" class="btn btn-primary">Sửa</a>
-                                  <a href="" class="btn btn-danger">Xóa</a>
+                                  <a href="{{route('suanv',['driver_id' => $dr->driver_id])}}" class="btn btn-primary"><i class='bx bxs-edit'></i></a>
+                                  <a href="{{route('xoanv',['driver_id' => $dr->driver_id])}}" class="btn btn-danger"><i class='bx bx-x-circle'></i></a>
                               </td>
                           </tr>
-                
+                          @endforeach
                       </tbody>
                 </table>
             </div>

@@ -39,12 +39,12 @@
 			</li>
 			<li>
 				<a href="{{route('qlynv')}}">
-					<i class='bx bxs-doughnut-chart' ></i>
+					<i class='bx bxs-group' ></i>
 					<span class="text">Quản lý nhân viên</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="{{route('backend.customer')}}">
 					<i class='bx bxs-message-dots' ></i>
 					<span class="text">Quản lý đơn hàng</span>
 				</a>

@@ -28,7 +28,7 @@
                 <div class="head">
                     <h3>Quản lý xe</h3>
                     <a href="{{route('themxe')}}"
-                    class="btn btn-primary float-end">Thêm Xe</a>
+                    class="btn btn-primary float-end"><i class='bx bx-plus-circle' ></i></a>
                   
                 </div>
                 <table>
@@ -54,8 +54,8 @@
                               <td>{{$sp->status}}</td>  <!-- Hiển thị trạng thái xe -->
                               {{-- <td>{{$sp->driver_id ->name}}</td>                        --}}
                               <td>
-                                  <a href="{{route('suaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-primary">Sửa</a>
-                                  <a href="{{route('xoaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-danger">Xóa</a>
+                                  <a href="{{route('suaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-primary"><i class='bx bxs-edit'></i></a>
+                                  <a href="{{route('xoaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-danger"><i class='bx bx-x-circle'></i></a>
                               </td>
                           </tr>
                         @endforeach      

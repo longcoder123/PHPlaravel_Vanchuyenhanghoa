@@ -25,41 +25,42 @@
                                 class="btn btn-danger float-end">Back</a></h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{route('updatexe',['vehicle_id'=> $vh->vehicle_id])}}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                             <div class="form-group mb-3">
-                                 <label for="">Loại Xe:</label>
-                                 <input type="text" name="loaixe" id="" class="form-control">
-                             </div>
-                
-                             <div class="form-group mb-3">
-                                 <label for="">Biển số xe :</label>
-                                 <input type="text" name="biensoxe" id="" class="form-control">
-                             </div>
-                             {{-- <div class="form-group mb-3">
-                                 <label for="">Tên tài xế : </label>
-                                 <input type="text" name="taixe" id="" class="form-control">
-                             </div> --}}
-                             <div class="form-group mb-3">
-                                 <label for="">Ảnh :</label>
-                                 <input type="file" name="anhdaidien" id="" class="form-control">
-                             </div>
-                             <div class="form-group mb-3">
-                                 <label for="">Trọng lượng :</label>
-                                 <input type="text" name="trongluong" id="" class="form-control">
-                             </div>
-                             <div class="form-group">
-                                <label for="trangthai">Trạng thái xe</label>
-                                <select name="trangthai" id="trangthai" class="form-control">
-                                    <option value="Có sẵn">Có sẵn</option>
-                                    <option value="Đang sử dụng">Đang sử dụng</option>
-                                    <option value="Đang bảo trì">Đang bảo trì</option>
+                        <form action="{{ route('updatexe', ['vehicle_id' => $vh->vehicle_id]) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group mb-3">
+                                <label for="">Biển số xe:</label>
+                                <input type="text" name="biensoxe" class="form-control" value="{{ old('biensoxe', $vh->license_plate) }}">
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="">Loại xe:</label>
+                                <input type="text" name="loaixe" class="form-control" value="{{ old('loaixe', $vh->vehicle_type) }}">
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="">Trọng lượng:</label>
+                                <input type="text" name="trongluong" class="form-control" value="{{ old('trongluong', $vh->capacity) }}">
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label for="">Trạng thái:</label>
+                                <select name="trangthai" class="form-control">
+                                    <option value="Có sẵn" {{ $vh->status == 'Có sẵn' ? 'selected' : '' }}>Sẵn sàng</option>
+                                    <option value="Đang sử dụng" {{ $vh->status == 'Đang sử dụng' ? 'selected' : '' }}>Đang giao hàng</option>
+                                    <option value="Đang bảo trì" {{ $vh->status == 'Đang bảo trì' ? 'selected' : '' }}>Nghỉ phép</option>
                                 </select>
                             </div>
-                             <div class="form-group mb-3 mt-3 float-right">
-                                 <button type="submit" class="btn btn-primary"> Sửa </button>
-                             </div>
-                         </form>
+                            
+                            <div class="form-group mb-3">
+                                <label for="">Ảnh:</label>
+                                <input type="file" name="anhdaidien" class="form-control">
+                            </div>
+                        
+                            <div class="form-group mb-3">
+                                <button type="submit" class="btn btn-primary">Sửa</button>
+                            </div>
+                        </form>
+                        
                          
                     </div>
                 </div>
