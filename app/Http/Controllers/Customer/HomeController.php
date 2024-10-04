@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\customer;
-
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,40 +15,70 @@ class HomeController extends Controller
     }
     public function calculate(Request $request)
     {
-        // Lấy dữ liệu từ form
-        $data = $request->all();
+        $distance = $request->input('quangduong');
 
-        // Xử lý dữ liệu hoặc tính toán chi phí vận chuyển dựa trên dữ liệu đã nhập
-        $from = $data['from'];
-        $to = $data['to'];
-        $packaging = $data['packaging'];
-        $insurance = isset($data['insurance']) ? true : false;
-        $quantity = $data['quantity'];
-        $weight = $data['weight'];
-        $weightUnit = $data['weight_unit'];
+        $data = $request->all();
+        // dd($request);
+        // Lấy dữ liệu đầu vào
+        $quantity =$data['quantity'];
         $length = $data['length'];
         $width = $data['width'];
         $height = $data['height'];
         $dimensionUnit = $data['dimension_unit'];
-        $shippingDate = $data['shipping_date'];
+        $weight = $data['weight'];
+        $weightUnit = $data['weight_unit'];
 
-        // Bạn có thể thêm logic để tính toán phí vận chuyển tại đây
-        // Ví dụ: Tính phí cơ bản dựa trên loại bao bì và khối lượng
-        $baseCost = 50000; // Phí cơ bản
-
-        if ($weightUnit === 'kg') {
-            $weightInKg = $weight;
-        } else {
-            // Chuyển đổi lb sang kg
-            $weightInKg = $weight * 0.453592;
+        // Chuyển đổi kích thước sang cm nếu đơn vị là inch
+        if ($dimensionUnit === 'in') {
+            $length = $length * 2.54;
+            $width = $width * 2.54;
+            $height = $height * 2.54;
         }
 
-        // Ví dụ tính phí dựa trên khối lượng
-        $cost = $baseCost + ($weightInKg * 10000); // Giả sử 10,000 VND cho mỗi kg
+        // Tính thể tích
+        $volume = $length * $width * $height;
 
-        // Trả về kết quả tính toán
-        return view('layoutMain.userPage.result', ['cost' => $cost]);
-       
-        
+        // Xác định loại kích thước
+        if ($volume < 100) {
+            $sizeCategory = 'S';
+        } elseif ($volume < 500) {
+            $sizeCategory = 'M';
+        } else {
+            $sizeCategory = 'L';
+        }
+
+        // Chuyển đổi trọng lượng sang kg nếu đơn vị là lb
+        if ($weightUnit === 'lb') {
+            $weight = $weight * 0.453592;
+        }
+
+        // Xác định loại trọng lượng
+        if ($weight <= 2) {
+            $weightCategory = 'S';
+        } elseif ($weight <= 5) {
+            $weightCategory = 'M';
+        } else {
+            $weightCategory = 'L';
+        }
+
+        // Kiểm tra sự phù hợp giữa kích thước và trọng lượng
+        if ($sizeCategory !== $weightCategory) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Kích thước và trọng lượng không phù hợp.'
+            ]);
+        }
+        // Nếu phù hợp, tính toán chi phí vận chuyển
+            $distanceCost = $distance * 5000;
+            $baseCost = 50000; // Phí cơ bản
+            $additionalCost = ($weight * 10000); // Giả sử 10,000 VND cho mỗi kg
+            $cost = ($baseCost + $additionalCost+$distanceCost)*$quantity;
+        return response()->json([
+            'success' => true,
+            'cost' => $cost,
+            'costFormatted' => number_format($cost, 0, ',', '.')
+        ]);
+
     }
+
 }

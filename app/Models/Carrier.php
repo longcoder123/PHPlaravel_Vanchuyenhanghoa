@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Carrier extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'carrier_id',
+        'name',
+        'phone',
+        'email',
+        'address'
+    ];
+
+    protected $primaryKey = 'carrier_id';
+    public $incrementing = true;
 }

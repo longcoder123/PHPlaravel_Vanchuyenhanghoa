@@ -20,9 +20,9 @@
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
-		<a href="#" class="brand">
+		<a href="#" class="brand  text-decoration-none">
 			<i class='bx bxs-smile'></i>
-			<span class="text">LongFast</span>
+			<span class="text">Flash-Ship  </span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
@@ -67,7 +67,7 @@
 					<span class="text">Tài khoản người dùng</span>
 				</a>
 			</li>
-			
+
 		</ul>
 		<ul class="side-menu">
 			<li>
@@ -109,11 +109,11 @@
 @yield('main')
 	</section>
 	<!-- CONTENT -->
-	
+
 
 	<script src="{{ asset('backend/script.js')}}"></script>
-	
-	
+
+
 
 </body>
 </html>
