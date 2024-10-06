@@ -5,7 +5,7 @@ use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\VehicleController;
 use App\Http\Controllers\Backend\DriverController;
 use App\Http\Controllers\customer\HomeController;
-use App\Http\Controllers\Backend\CustomerController;   
+use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PakagesController;
 
@@ -13,14 +13,14 @@ use App\Http\Controllers\Backend\PakagesController;
 //Backend
 Route::get('/admin',[AdminController::class,'index'])->name('admin');
 
-// Khách hàng 
+// Khách hàng
 
 Route::get('/backend/khachang', [CustomerController::class, 'khachang'])->name('backend.customer');
 
-// Đơn hàng 
+// Đơn hàng
 Route::get('/backend/donhang', [OrderController::class, 'order'])->name('backend.order');
 
-//gói hàng 
+//gói hàng
 Route::get('/backend/goihang', [PakagesController::class, 'goihang'])->name('backend.packages');
 //quanlixe
 Route::get('/qlixe', [VehicleController::class, 'qlxe'])->name('qlixe');
@@ -50,7 +50,7 @@ Route::get('/delete-nv/{driver_id}', [DriverController::class,'delete'])->name('
 
 
 
-// Frontend Home 
+// Frontend Home
 Route::get('/',[HomeController::class,'layoutHome'])->name('home');
 Route::get('/infor',[HomeController::class,'layoutInfor'])->name('infor');
 
@@ -63,3 +63,4 @@ Route::get('/infor',[HomeController::class,'layoutInfor'])->name('infor');
 //     return view('layouts.layoutMain.userPage.customerInformation');
 // });
 Route::post('/calculate-shipping-cost', [HomeController::class, 'calculate'])->name('calculateShippingCost');
+

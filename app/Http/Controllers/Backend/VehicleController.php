@@ -6,30 +6,33 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\vehicle;
 use Illuminate\Support\Facades\File;
+use Psy\Readline\Hoa\Console;
 
 class VehicleController extends Controller
 {
     public function qlxe(){
-        $vh = vehicle::all(); 
+        $vh = vehicle::all();
         return view("Backend.quanlixe", compact("vh"));
     }
 
-    // xử lí thêm xe 
+    // xử lí thêm xe
     public function addxe(){
         return view("Backend.Addxe");
     }
     public function store(Request $request){
+
         $vh = new vehicle;
         $vh -> vehicle_id = $request->vehicle_id;
         $vh -> license_plate = $request -> input('biensoxe');
         $vh -> vehicle_type = $request -> input('loaixe');
         $vh -> capacity = $request -> input('trongluong');
-        $vh -> status = $request -> input('trangthai'); 
-        // $vh -> driver_id = $request -> input('taixe');
+        $vh -> status = $request -> input('trangthai');
         
+        // $vh -> driver_id = $request -> input('taixe');
+
         if($request -> hasFile('anhdaidien')){
             $file = $request -> file('anhdaidien');
-            $extention = $file -> getClientOriginalExtension(); 
+            $extention = $file -> getClientOriginalExtension();
             $fillname =time().'.'.$extention;
             $file -> move('Uploads/admin', $fillname);
             $vh -> vehicle_image = $fillname;
@@ -38,7 +41,7 @@ class VehicleController extends Controller
     return redirect()->back()->with('status','Thêm xe thành công');
 }
 
-// Sửa thông tin xe 
+// Sửa thông tin xe
     public function edit($vehicle_id){
         $vh = vehicle::find($vehicle_id);
         return view('Backend.Editxe', compact('vh'));
@@ -49,13 +52,13 @@ class VehicleController extends Controller
         if (!$vh) {
             return redirect()->back()->with('error', 'Xe không tồn tại');
         }
-    
+
         // Cập nhật các trường
         $vh->license_plate = $request->input('biensoxe');
         $vh->vehicle_type = $request->input('loaixe');
         $vh->capacity = $request->input('trongluong');
         $vh->status = $request->input('trangthai');
-    
+
         // Xử lý ảnh
         if ($request->hasFile('anhdaidien')) {
             // Xóa ảnh cũ nếu có
@@ -63,7 +66,7 @@ class VehicleController extends Controller
             if (File::exists($anhcu)) {
                 File::delete($anhcu);
             }
-    
+
             // Lưu ảnh mới
             $file = $request->file('anhdaidien');
             $extention = $file->getClientOriginalExtension();
@@ -71,15 +74,15 @@ class VehicleController extends Controller
             $file->move('Uploads/admin', $fillname);
             $vh->vehicle_image = $fillname; // Cập nhật tên ảnh
         }
-    
+
         // Lưu thông tin đã cập nhật
         $vh->save(); // Sử dụng save() thay vì update()
-        
+
         return redirect()->back()->with('status', 'Sửa thông tin thành công');
     }
-    
 
-    // xóa xe 
+
+    // xóa xe
     public function delete($vehicle_id){
         $vh = vehicle::find($vehicle_id);
         if (File::exists($vh)){
@@ -88,5 +91,5 @@ class VehicleController extends Controller
     $vh -> delete();
     return redirect()->back()->with('status','Xóa thành công');
 }
-  
+
 }

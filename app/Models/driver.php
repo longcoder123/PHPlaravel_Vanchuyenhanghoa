@@ -15,9 +15,7 @@ class driver extends Model
 
     public function vehicle()
     {
-        
         return $this->belongsTo(Vehicle::class, 'vehicle_id', 'vehicle_id'); // Xác định khóa ngoại và khóa chính
-
     }
-    
+
 }
