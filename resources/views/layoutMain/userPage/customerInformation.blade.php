@@ -11,16 +11,17 @@
                     <div class="row mb-3">
                         <div class="col-md-12 mb-3">
                             <label for="from" class="form-label">Từ*</label>
-                            <input type="text" id="from" name="from" class="form-control" placeholder="Nhập địa chỉ gửi" oninput="fetchLocationSuggestions(this.value, 'from-suggestions')">
+                            <input type="text" id="from" name="from" class="form-control" placeholder="Nhập địa chỉ gửi" oninput="fetchLocationSuggestions(this.value, 'from-suggestions',0)">
                             <div id="from-suggestions" class="suggestions"></div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="to" class="form-label">Tới*</label>
-                            <input type="text" id="to" name="to" class="form-control" placeholder="Nhập địa chỉ nhận" oninput="fetchLocationSuggestions(this.value, 'to-suggestions')">
+                            <input type="text" id="to" name="to" class="form-control" placeholder="Nhập địa chỉ nhận" oninput="fetchLocationSuggestions(this.value, 'to-suggestions',1)">
                             <div id="to-suggestions" class="suggestions"></div>
                         </div>
                     </div>
                     <input type="text" class="" id="quangduong" name="quangduong">
+                    <button class="btn border rounded" onclick="">tính quãng đường</button>
                     <!-- Address Confirmation -->
                     <div class="row mb-3">
                         <div class="col">
@@ -119,7 +120,7 @@
 <script>
    let timeoutId;
 
-async function fetchLocationSuggestions(query, suggestionBoxId) {
+async function fetchLocationSuggestions(query, suggestionBoxId,index) {
     if (!query) {
         document.getElementById(suggestionBoxId).innerHTML = '';
         return;
@@ -148,13 +149,22 @@ async function fetchLocationSuggestions(query, suggestionBoxId) {
 
                     // Lưu tọa độ để tính toán quãng đường
                     if (window.selectedLocations.length < 2) {
+
                         window.selectedLocations.push(selectedLocation);
-                        if (window.selectedLocations.length === 2) {
-                            calculateDistance(window.selectedLocations[0], window.selectedLocations[1]);
-                            const origin = `${window.selectedLocations[0].lat},${window.selectedLocations[0].lon}`;
-                        const destination = `${window.selectedLocations[1].lat},${window.selectedLocations[1].lon}`;
-                        }
+
                     }
+                    if (window.selectedLocations.length === 2) {
+                            if(index===0){
+                                window.selectedLocations[0]=selectedLocation;
+                            }
+                            if(index===1){
+                                window.selectedLocations[1]=selectedLocation;
+                            }
+                            calculateDistance(window.selectedLocations[0], window.selectedLocations[1]);
+                        //     const origin = `${window.selectedLocations[0].lat},${window.selectedLocations[0].lon}`;
+                        // const destination = `${window.selectedLocations[1].lat},${window.selectedLocations[1].lon}`;
+                    }
+
                 };
                 suggestionBox.appendChild(div);
             });

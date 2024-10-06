@@ -4,14 +4,18 @@ namespace App\Http\Controllers\customer;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class HomeController extends Controller
 {
     public function layoutHome(){
+
         return view("layoutMain.userPage.home");
     }
     public function layoutInfor(){
-        return view("layoutMain.userPage.customerInformation");
+         return view("layoutMain.userPage.customerInformation");
+        //return view("layoutMain.userPage.detailPackage");
     }
     public function calculate(Request $request)
     {
@@ -19,7 +23,7 @@ class HomeController extends Controller
 
         $data = $request->all();
         // dd($request);
-        // Lấy dữ liệu đầu vào
+
         $quantity =$data['quantity'];
         $length = $data['length'];
         $width = $data['width'];
@@ -73,6 +77,7 @@ class HomeController extends Controller
             $baseCost = 50000; // Phí cơ bản
             $additionalCost = ($weight * 10000); // Giả sử 10,000 VND cho mỗi kg
             $cost = ($baseCost + $additionalCost+$distanceCost)*$quantity;
+          
         return response()->json([
             'success' => true,
             'cost' => $cost,
@@ -80,5 +85,43 @@ class HomeController extends Controller
         ]);
 
     }
+
+
+
+
+
+
+    public function store(Request $request)
+{
+    // Lấy dữ liệu đầu vào từ form
+    $data = $request->all();
+
+    // Tạo một đối tượng gói hàng mới
+    $package = new \App\Models\Package();
+    //$package->customer_id = auth()->user()->customer_id; // Giả sử user đã đăng nhập và có customer_id
+    $package->description = 'Gói hàng tiêu chuẩn';
+    $package->weight = $data['weight'];
+    $package->size = $data['length'] . 'x' . $data['width'] . 'x' . $data['height'];
+    $package->value = 100000; // Ví dụ, gán giá trị mặc định
+    $package->status = 'Đang chờ xử lý';
+    $package->save();
+
+    // Tạo một đơn hàng mới
+    $order = new \App\Models\Order();
+    $order->package_id = $package->package_id;  // Gán gói hàng vừa tạo
+    $order->sender_address = $data['from'];
+    $order->receiver_name = $data['receiver_name'];
+    $order->receiver_phone = $data['receiver_phone'];
+    $order->receiver_address = $data['to'];
+    $order->order_date = now();
+    $order->delivery_date = now()->addDays(3); // Ví dụ thêm 3 ngày cho ngày giao hàng
+    $order->vehicle_id = 1;  // Gán giá trị mặc định
+    $order->driver_id = 1;   // Gán giá trị mặc định
+    $order->shipping_fee = $data['cost'];
+    $order->status = 'Đã đặt';
+    $order->save();
+
+    return redirect()->route('order.success')->with('success', 'Đơn hàng của bạn đã được lưu thành công!');
+}
 
 }
