@@ -77,7 +77,7 @@ class HomeController extends Controller
             $baseCost = 50000; // Phí cơ bản
             $additionalCost = ($weight * 10000); // Giả sử 10,000 VND cho mỗi kg
             $cost = ($baseCost + $additionalCost+$distanceCost)*$quantity;
-          
+
         return response()->json([
             'success' => true,
             'cost' => $cost,
@@ -99,6 +99,7 @@ class HomeController extends Controller
     // Tạo một đối tượng gói hàng mới
     $package = new \App\Models\Package();
     //$package->customer_id = auth()->user()->customer_id; // Giả sử user đã đăng nhập và có customer_id
+    $package->customer_id = 1;
     $package->description = 'Gói hàng tiêu chuẩn';
     $package->weight = $data['weight'];
     $package->size = $data['length'] . 'x' . $data['width'] . 'x' . $data['height'];
