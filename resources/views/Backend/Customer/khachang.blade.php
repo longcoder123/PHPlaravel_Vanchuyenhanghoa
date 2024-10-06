@@ -11,11 +11,11 @@
                     </li>
                     <li><i class='bx bx-chevron-right' ></i></li>
                     <li>
-                        <a class="active" href="#">Khách hàng</a>
+                        <a class="active" href="#" style="text-decoration: none">Khách hàng</a>
                     </li>
                 </ul>
             </div>
-            <a href="#" class="btn-download">
+            <a href="#" class="btn-download" style="text-decoration: none">
                 <i class='bx bxs-cloud-download' ></i>
                 <span class="text">Tải PDF</span>
             </a>
@@ -53,11 +53,11 @@
                               <td>Hai bà trưng - Hà Nội</td>
                               <td>03132132133</td>                        
                               <td>Nam</td> 
-                              <td ><a href="{{route('backend.order')}}"><i class='bx bx-folder'></i> chi tiết</a></td>
+                              <td ><a href="{{route('backend.order')}}" style="text-decoration: none"><i class='bx bx-folder'></i> chi tiết</a></td>
                               <td>1</td>
                               <td>
-                                  <a href="" class="btn btn-primary"><i class='bx bxs-edit'></i></a>
-                                  <a href="" class="btn btn-danger"><i class='bx bx-x-circle'></i></a>
+                                  <a href="" class="btn btn-primary" style="text-decoration: none"><i class='bx bxs-edit'></i></a>
+                                  <a href="" class="btn btn-danger" style="text-decoration: none"><i class='bx bx-x-circle'></i></a>
                               </td>
                           </tr>
                     

@@ -15,7 +15,7 @@
                     </li>
                 </ul>
             </div>
-            <a href="#" class="btn-download">
+            <a href="#" class="btn-download" style="text-decoration: none">
                 <i class='bx bxs-cloud-download' ></i>
                 <span class="text">Tải PDF</span>
             </a>
