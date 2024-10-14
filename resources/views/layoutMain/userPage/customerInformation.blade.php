@@ -20,8 +20,9 @@
                             <div id="to-suggestions" class="suggestions"></div>
                         </div>
                     </div>
-                    <input type="text" class="" id="quangduong" name="quangduong">
-                    <button class="btn border rounded" onclick="">tính quãng đường</button>
+                    <input  type="hidden" id="quangduong" name="quangduong">
+                    <input  type="hidden" id="tongtien" name="tongtien">
+
                     <!-- Address Confirmation -->
                     <div class="row mb-3">
                         <div class="col">
@@ -70,9 +71,9 @@
                         <div class="col-md-6 mb-3">
                             <label for="dimensions" class="form-label">Kích thước D x R x C*</label>
                             <div class="input-group">
-                                <input type="number" name="length" class="form-control" placeholder="D">
-                                <input type="number" name="width" class="form-control" placeholder="R">
-                                <input type="number" name="height" class="form-control" placeholder="C">
+                                <input type="number" name="length" value="1" class="form-control" placeholder="D" >
+                                <input type="number" name="width" value="1" class="form-control" placeholder="R">
+                                <input type="number" name="height" value="1" class="form-control" placeholder="C">
                                 <select class="form-select" name="dimension_unit">
                                     <option value="in" selected>in</option>
                                     <option value="cm">cm</option>
@@ -97,15 +98,31 @@
                         {{ session('error') }}
                     </div>
                     @endif
+                    <h5>Thông tin người nhận hàng hóa</h5>
+                    <div class="row mb-4 mt-3">
+                        <div class="col-md-5 mb-3">
+                            <label for="shipping-date" class="form-label">Nhập họ và tên*</label>
+                            <input type="text" name="recipien_name" class="form-control" placeholder="Họ và tên người nhận" >
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="shipping-date" class="form-label">Nhập số điện thoại*</label>
+                            <input type="text" name="recipient_phone_number" class="form-control"  placeholder="Số điện thoại người nhận" onkeypress="return isNumber(event)">
+                        </div>
+
+                    </div>
                     <!-- @if(session('success'))
                     <div class="alert alert-success text-center">
                         {{ session('success') }}
                     </div>
                     @endif -->
+
                     <div id="resultMessage" class="mt-3 text-center"></div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 ">
                         <div class="col text-center">
                             <button type="submit" id="calculateButton" class="btn btn-primary">Hiển thị giá</button>
+                        </div>
+                        <div class="col text-center">
+                            <button type="submit" formaction="{{ route('saveData') }}" class="btn btn-primary">Thanh Toán</button>
                         </div>
                     </div>
                 </div>
@@ -116,7 +133,12 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-
+<script>
+        function isNumber(event) {
+            const char = String.fromCharCode(event.which);
+            return /^[0-9]$/.test(char); // Chỉ cho phép ký tự số
+        }
+    </script>
 <script>
    let timeoutId;
 
@@ -151,7 +173,13 @@ async function fetchLocationSuggestions(query, suggestionBoxId,index) {
                     if (window.selectedLocations.length < 2) {
 
                         window.selectedLocations.push(selectedLocation);
-
+                        if(index===0){
+                                window.selectedLocations[0]=selectedLocation;
+                                document.getElementById('tu').value =selectedLocation.name;
+                            }
+                            if(index===1){
+                                window.selectedLocations[1]=selectedLocation;
+                            }
                     }
                     if (window.selectedLocations.length === 2) {
                             if(index===0){
@@ -161,8 +189,7 @@ async function fetchLocationSuggestions(query, suggestionBoxId,index) {
                                 window.selectedLocations[1]=selectedLocation;
                             }
                             calculateDistance(window.selectedLocations[0], window.selectedLocations[1]);
-                        //     const origin = `${window.selectedLocations[0].lat},${window.selectedLocations[0].lon}`;
-                        // const destination = `${window.selectedLocations[1].lat},${window.selectedLocations[1].lon}`;
+
                     }
 
                 };
@@ -193,7 +220,6 @@ async function calculateDistance(locationA, locationB) {
         if (data.routes && data.routes.length > 0) {
             const distance = data.routes[0].distance;
             document.getElementById('quangduong').value = (distance / 1000).toFixed(2);
-            console.log(`Quảng đường: ${(distance / 1000).toFixed(2)} km`);
 
         } else {
             console.log('Không có kết quả');
@@ -223,6 +249,7 @@ async function calculateDistance(locationA, locationB) {
                 if (response.success) {
                     // Nếu thành công, hiển thị chi phí
                     $('#resultMessage').html('<div class="alert alert-success">Chi phí là: ' + response.costFormatted + ' VND</div>');
+                    document.getElementById('tongtien').value=response.costFormatted;
                 } else {
                     // Nếu không thành công, hiển thị thông báo lỗi
                     $('#resultMessage').html('<div class="alert alert-danger">' + response.error + '</div>');

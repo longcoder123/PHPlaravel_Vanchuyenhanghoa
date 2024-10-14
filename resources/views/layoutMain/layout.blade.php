@@ -21,7 +21,12 @@
       crossorigin="anonymous"
     ></script>
     <style>
-
+.toggle-div {
+            display: none;
+            padding: 20px;
+            background-color: #f58220;
+            color: white;
+        }
     </style>
   </head>
   <body>
