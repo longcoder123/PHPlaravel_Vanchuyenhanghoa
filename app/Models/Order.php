@@ -23,7 +23,10 @@ class Order extends Model
         'shipping_fee',
         'status'
     ];
-
+    public function packages()
+    {
+        return $this->belongsTo(Package::class, 'package_id', 'package_id'); 
+    }
     protected $primaryKey = 'order_id';
     public $incrementing = true;
 }

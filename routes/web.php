@@ -8,7 +8,8 @@ use App\Http\Controllers\customer\HomeController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PakagesController;
-
+use App\Http\Controllers\Customer\DetailPackagesController;
+use App\Http\Controllers\Customer\oder;
 
 //Backend
 Route::get('/admin',[AdminController::class,'index'])->name('admin');
@@ -63,4 +64,9 @@ Route::get('/infor',[HomeController::class,'layoutInfor'])->name('infor');
 //     return view('layouts.layoutMain.userPage.customerInformation');
 // });
 Route::post('/calculate-shipping-cost', [HomeController::class, 'calculate'])->name('calculateShippingCost');
+
+
+Route::post('/save-data', [oder::class, 'checkProvince'])->name('saveData');
+///detail
+Route::get('/detail-package',[DetailPackagesController::class,'ViewDetailOfUser'])->name('detailpackage');
 
