@@ -39,13 +39,13 @@ class DriverController extends Controller
           return redirect()->back()->with('value', 'Mã căn cước công dân bị trùng. Vui lòng kiểm tra lại.');
       }
   
-      // Kiểm tra trùng số điện thoại (phone)
+      // Kiểm tra trùng số điện thoại
       $existingPhone = driver::where('phone', $request->input('sodienthoai'))->exists();
       if ($existingPhone) {
           return redirect()->back()->with('value', 'Số điện thoại đã được sử dụng. Vui lòng kiểm tra lại.');
       }
   
-      // Tiến hành thêm mới tài xế
+
       $driver = new driver();
       $driver->driver_id = $request->driver_id;
       $driver->name = $request->input('tennv');
