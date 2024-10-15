@@ -11,7 +11,7 @@ class vehicle extends Model
 
     protected $fillable = ["vehicle_id", "license_plate", "vehicle_type", "capacity", "status", "vehicle_image", "carrier_id","created_at"];
 
-    protected $primaryKey = 'vehicle_id'; // Khóa chính là 'vehicle_id'
-    public $incrementing = false; // Nếu 'vehicle_id' không phải là auto-increment
+    protected $primaryKey = 'vehicle_id';
+    public $incrementing = false;
 
 }

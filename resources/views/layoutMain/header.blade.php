@@ -23,8 +23,8 @@
         <a href="{{ route('infor') }}" class="text-decoration-none text-white btn btn-primary fs-4">
           <i class="fa-solid fa-plus"></i> Tạo đơn hàng ngay
         </a>
-        <button class="btn btn-secondary fs-4">
+        <a href="{{ route('detailpackage') }}"  class="btn btn-secondary fs-4">
           <i class="fa-solid fa-truck-arrow-right"></i> Theo dõi đơn hàng
-        </button>
+        </a>
       </div>
     </div>
