@@ -51,7 +51,7 @@
                                 <p>{{$sp->license_plate}}</p></td>
                               <td>{{$sp->vehicle_type}}</td>
                               <td>{{$sp->capacity}} Tấn</td>
-                              <td>{{$sp->status}}</td>  <!-- Hiển thị trạng thái xe -->
+                              <td>{{$sp->status}}</td>  
                               {{-- <td>{{$sp->driver_id ->name}}</td>                        --}}
                               <td>
                                   <a href="{{route('suaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-primary"><i class='bx bxs-edit'></i></a>

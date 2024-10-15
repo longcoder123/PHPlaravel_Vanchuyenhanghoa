@@ -57,25 +57,25 @@
                         @csrf
                              <div class="form-group mb-3">
                                  <label for="">Tên :</label>
-                                 <input type="text" name="tennv" id="" class="form-control">
+                                 <input type="text" name="tennv" id="" class="form-control" value="{{ old('tennv') }}" placeholder="Tên nhân viên">
                              </div>
                 
                              <div class="form-group mb-3">
                                  <label for="">Số Điện Thoại :</label>
-                                 <input type="text" name="sodienthoai" id="" class="form-control">
+                                 <input type="text" name="sodienthoai" id="" class="form-control" value="{{ old('sodienthoai') }}" placeholder="Số điện thoại">
                              </div>
                              
                              <div class="form-group mb-3">
                                  <label for="">Ảnh :</label>
-                                 <input type="file" name="anhdaidien" id="" class="form-control">
+                                 <input type="file" name="anhdaidien" id="" class="form-control" >
                              </div>
                              <div class="form-group mb-3">
                                  <label for="">Email :</label>
-                                 <input type="text" name="email" id="" class="form-control">
+                                 <input type="text" name="email" id="" class="form-control" value="{{ old('email') }}" placeholder="Email">
                              </div>
                              <div class="form-group mb-3">
                                 <label for="">Căn cước công dân :</label>
-                                <input type="text" name="cccd" id="" class="form-control">
+                                <input type="text" name="cccd" id="" class="form-control" value="{{ old('cccd') }}" placeholder="Căn cước công dân">
                             </div>
                              <div class="form-group">
                                 <label for="trangthai">Trạng thái nhân viên</label>
@@ -87,7 +87,7 @@
                             </div>
                              <div class="form-group mb-3">
                                  <label for="">Mã xe : </label>
-                                 <input type="text" name="maxe" id="" class="form-control">
+                                 <input type="text" name="maxe" id="" class="form-control" value="{{ old('maxe') }}" placeholder="Mã xe">
                              </div> 
                              <div class="form-group mb-3">
                                  <button type="submit" class="btn btn-primary"> Thêm </button>

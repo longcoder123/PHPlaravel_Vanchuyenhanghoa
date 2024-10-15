@@ -29,8 +29,12 @@
                        "positionClass": "toast-top-center", // Căn giữa phía trên
                    }
 
-                   @if (session('editxe'))
-                       toastr.success("{{ session('editxe') }}");
+                   @if (session('editnv'))
+                       toastr.success("{{ session('editnv') }}");
+                   @endif
+
+                   @if (session('error'))
+                       toastr.success("{{ session('error') }}");
                    @endif
 
                    @if ($errors->any())
