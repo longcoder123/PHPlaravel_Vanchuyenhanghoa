@@ -21,6 +21,16 @@ class VehicleController extends Controller
     }
     public function store(Request $request){
 
+    // Kiểm tra sự tồn tại của license_plate trong bảng Vehicles
+    $request->validate([
+        'biensoxe' => 'required|unique:vehicles,license_plate',
+        'loaixe' => 'required',
+        'trongluong' => 'required|numeric',
+        'trangthai' => 'required'
+    ], [
+        'biensoxe.unique' => 'Biển số xe đã tồn tại!',
+    ]);
+
         $vh = new vehicle;
         $vh -> vehicle_id = $request->vehicle_id;
         $vh -> license_plate = $request -> input('biensoxe');
@@ -47,6 +57,16 @@ class VehicleController extends Controller
         return view('Backend.Editxe', compact('vh'));
     }
     public function update(Request $request, $vehicle_id) {
+       // Kiểm tra sự tồn tại của license_plate trong bảng Vehicles
+        $request->validate([
+            'biensoxe' => 'required|unique:vehicles,license_plate',
+            'loaixe' => 'required',
+            'trongluong' => 'required|numeric',
+            'trangthai' => 'required'
+        ], [
+            'biensoxe.unique' => 'Biển số xe đã tồn tại!',
+        ]);
+
         // Tìm xe theo vehicle_id
         $vh = Vehicle::find($vehicle_id);
         if (!$vh) {
@@ -78,18 +98,25 @@ class VehicleController extends Controller
         // Lưu thông tin đã cập nhật
         $vh->save(); // Sử dụng save() thay vì update()
 
-        return redirect()->back()->with('status', 'Sửa thông tin thành công');
+        return redirect()->back()->with('editxe', 'Sửa thông tin thành công');
     }
 
 
     // xóa xe
-    public function delete($vehicle_id){
-        $vh = vehicle::find($vehicle_id);
-        if (File::exists($vh)){
-            File::exists($vh);
+// Xóa xe
+public function delete($vehicle_id) {
+    $vh = vehicle::find($vehicle_id);
+    
+    // Kiểm tra nếu xe tồn tại
+    if ($vh) {
+        if (File::exists(public_path('Uploads/admin/'.$vh->vehicle_image))) {
+            File::delete(public_path('Uploads/admin/'.$vh->vehicle_image)); // Xóa ảnh của xe nếu có
+        }
+        $vh->delete(); // Xóa xe khỏi database
+        return redirect()->back()->with('delete', 'Xóa xe thành công');
     }
-    $vh -> delete();
-    return redirect()->back()->with('status','Xóa thành công');
+    
+    return redirect()->back()->with('delete', 'Xe không tồn tại');
 }
 
 }

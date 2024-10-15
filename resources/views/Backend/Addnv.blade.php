@@ -7,9 +7,9 @@
     <title>Thêm Nhân Viên</title>
     <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+   
 </head>
 <style>
         .form-group label {
@@ -21,9 +21,32 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                @if (session('status'))
-                <h5 class="alert alert-success">{{ session('status')}}</h5>
-                @endif
+               <!-- Thông báo hiển thị thêm nv thành công -->
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+               
+               <script>
+                   // Hiển thị thời gian và căn giữa
+                   toastr.options = {
+                       "closeButton": true,
+                       "progressBar": true,
+                       "timeOut": "1000", // 3 giây
+                       "extendedTimeOut": "1000",
+                       "positionClass": "toast-top-center", // Căn giữa phía trên
+                   }
+
+                   @if (session('status'))
+                       toastr.success("{{ session('status') }}");
+                   @endif
+                   @if (session('error'))
+                       toastr.success("{{ session('error') }}");
+                   @endif
+                   @if (session('value'))
+                       toastr.success("{{ session('value') }}");
+                   @endif
+
+                   
+               </script>
                 <div class="card">
                     <div class="card-header">
                         <h3>Thêm nhân viên <a href="{{route('qlynv')}}"
@@ -57,9 +80,9 @@
                              <div class="form-group">
                                 <label for="trangthai">Trạng thái nhân viên</label>
                                 <select name="trangthai" id="trangthai" class="form-control">
-                                    <option value="Có sẵn">Sẵn sàng</option>
-                                    <option value="Đang sử dụng">Đang giao hàng</option>
-                                    <option value="Đang bảo trì">Nghỉ phép</option>
+                                    <option value="Sẵn sàng">Sẵn sàng</option>
+                                    <option value="Đang giao hàng">Đang giao hàng</option>
+                                    <option value="Nghỉ phép">Nghỉ phép</option>
                                 </select>
                             </div>
                              <div class="form-group mb-3">
@@ -69,13 +92,13 @@
                              <div class="form-group mb-3">
                                  <button type="submit" class="btn btn-primary"> Thêm </button>
                              </div>
-                         </form>
-                         
+                         </form>    
                     </div>
                 </div>
             </div>
         </div>
     </div>
+     <!-- Latest compiled JavaScript -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>    
 </body>
-
 </html>

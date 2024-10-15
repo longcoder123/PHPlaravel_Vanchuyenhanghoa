@@ -1,13 +1,13 @@
 
     <div class="container-fluild p-4">
       <div class="col-12 d-flex">
-        <div class="col-2 align-self-center">VẬN CHUYỂN HÀNG HÓA</div>
+        <div class="col-2 align-self-center" style="font-weight: 200px">Long FAST</div>
         <div class="col-8 d-flex justify-content-around px-3 align-self-center">
-          <a href="">Giới thiệu</a><a href="">Các dịch vụ</a
-          ><a href="">Tra cứu đơn hàng</a>
+          <a href="" style="text-decoration: none">Giới thiệu</a><a href="" style="text-decoration: none">Các dịch vụ</a
+          ><a href="" style="text-decoration: none ">Tra cứu đơn hàng</a>
         </div>
         <div class="col-2 text-center">
-          <button class="btn text-white bg-secondary">Login</button>
+          <button class="btn text-white bg-secondary">Đăng Nhập</button>
         </div>
       </div>
       <hr />

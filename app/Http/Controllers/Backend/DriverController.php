@@ -19,25 +19,59 @@ class DriverController extends Controller
       return view("Backend.Addnv");
   }
   
-   public function store(Request $request){
+  public function store(Request $request)
+  {
+      // Kiểm tra tồn tại xe
+      $vehicleExist = \App\Models\Vehicle::where('vehicle_id', $request->input('maxe'))->exists();
+      if (!$vehicleExist) {
+          return redirect()->back()->with('error', 'Xe không tồn tại. Vui lòng kiểm tra lại.');
+      }
+  
+      // Kiểm tra trùng ID xe
+      $existingDriver = driver::where('vehicle_id', $request->input('maxe'))->exists();
+      if ($existingDriver) {
+          return redirect()->back()->with('error', 'Xe đã có tài xế. Vui lòng chọn lại.');
+      }
+  
+      // Kiểm tra trùng căn cước công dân (license_number)
+      $existingLicense = driver::where('license_number', $request->input('cccd'))->exists();
+      if ($existingLicense) {
+          return redirect()->back()->with('value', 'Mã căn cước công dân bị trùng. Vui lòng kiểm tra lại.');
+      }
+  
+      // Kiểm tra trùng số điện thoại (phone)
+      $existingPhone = driver::where('phone', $request->input('sodienthoai'))->exists();
+      if ($existingPhone) {
+          return redirect()->back()->with('value', 'Số điện thoại đã được sử dụng. Vui lòng kiểm tra lại.');
+      }
+  
+      // Tiến hành thêm mới tài xế
       $driver = new driver();
       $driver->driver_id = $request->driver_id;
-      $driver->name = $request->input("tennv");
-      $driver->phone = $request->input("sodienthoai");
-      $driver->email = $request->input("email");
-      $driver->license_number = $request->input("cccd");
-      $driver->status = $request->input("trangthai");
-      $driver->vehicle_id = $request->input("maxe");
-      if($request -> hasFile('anhdaidien')){
-         $file = $request -> file('anhdaidien');
-         $extention = $file -> getClientOriginalExtension(); 
-         $fillname =time().'.'.$extention;
-         $file -> move('Uploads/admin', $fillname);
-         $driver-> driver_image = $fillname;
- }
- $driver->save();
- return redirect()->back()->with('status','Thêm nhân viên thành công');
-   }
+      $driver->name = $request->input('tennv');
+      $driver->phone = $request->input('sodienthoai');
+      $driver->email = $request->input('email');
+      $driver->license_number = $request->input('cccd');
+      $driver->status = $request->input('trangthai');
+      $driver->vehicle_id = $request->input('maxe');
+  
+      // Xử lý upload ảnh cho tài xế
+      if ($request->hasFile('anhdaidien')) {
+          $file = $request->file('anhdaidien');
+          $extention = $file->getClientOriginalExtension(); 
+          $fileName = time() . '.' . $extention;
+          $file->move('Uploads/admin', $fileName);
+          $driver->driver_image = $fileName;
+      }
+  
+      // Lưu tài xế vào cơ sở dữ liệu
+      $driver->save();
+  
+      // Redirect lại với thông báo thành công
+      return redirect()->back()->with('status', 'Thêm nhân viên thành công');
+  }
+  
+
 
    // sửa thông tin nhân viên
    public function edit($driver_id) {
@@ -78,6 +112,6 @@ public function delete($driver_id){
        File::exists($driver);
 }
 $driver-> delete();
-return redirect()->back()->with('status','Xóa thành công');
+return redirect()->back()->with('deletenv','Xóa nhân viên thành công');
 }
 }

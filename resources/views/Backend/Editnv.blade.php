@@ -6,16 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sửa Nhân Viên</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Toastr CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  
 </head>
 
 <body>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                @if (session('status'))
-                    <h5 class="alert alert-success">{{ session('status')}}</h5>
-                @endif
+               <!-- Thông báo hiển thị sửa nv thành công -->
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+               
+               <script>
+                   // Hiển thị thời gian và căn giữa
+                   toastr.options = {
+                       "closeButton": true,
+                       "progressBar": true,
+                       "timeOut": "1000", // 3 giây
+                       "extendedTimeOut": "1000",
+                       "positionClass": "toast-top-center", // Căn giữa phía trên
+                   }
+
+                   @if (session('editxe'))
+                       toastr.success("{{ session('editxe') }}");
+                   @endif
+
+                   @if ($errors->any())
+                       toastr.error("{{ $errors->first('biensoxe') }}");
+                   @endif
+               </script>
+
                 <div class="card">
                     <div class="card-header">
                         <h3>Sửa nhân viên <a href="{{ route('qlynv') }}" class="btn btn-danger float-end">BACK</a></h3>
@@ -72,6 +94,6 @@
             </div>
         </div>
     </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
