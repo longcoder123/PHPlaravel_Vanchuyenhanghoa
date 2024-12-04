@@ -37,27 +37,18 @@
                     </thead>
                     <tbody>
                         @foreach($vh as $sp)  
-                            <tr>
-                                <td class="text-center">
-                                    <img src="{{ asset('Uploads/admin/' . $sp->vehicle_image) }}" alt="Hình ảnh xe" width="80">
-                                </td>
-                                <td class="text-center">{{ $sp->license_plate }}</td>
-                                <td class="text-center">{{ $sp->vehicle_type }}</td>
-                                <td class="text-center">{{ $sp->capacity }} Tấn</td>
-                                <td class="text-center">
-                                    <span class="badge {{ $sp->status == 'Đang hoạt động' ? 'badge-success' : 'badge-secondary' }}">
-                                        {{ $sp->status }}
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('suaxe', ['vehicle_id' => $sp->vehicle_id]) }}" class="btn btn-primary">
-                                        <i class='bx bxs-edit'></i>
-                                    </a>
-                                    <a href="{{ route('xoaxe', ['vehicle_id' => $sp->vehicle_id]) }}" class="btn btn-danger">
-                                        <i class='bx bx-x-circle'></i>
-                                    </a>
-                                </td>
-                            </tr>
+                          <tr>
+                              <td><img src="{{asset('Uploads/admin/' .$sp ->vehicle_image )}}">
+                                <p>{{$sp->license_plate}}</p></td>
+                              <td>{{$sp->vehicle_type}}</td>
+                              <td>{{$sp->capacity}} Tấn</td>
+                              <td>{{$sp->status}}</td>  
+                              {{-- <td>{{$sp->driver_id ->name}}</td>                        --}}
+                              <td>
+                                  <a href="{{route('suaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-primary"><i class='bx bxs-edit'></i></a>
+                                  <a href="{{route('xoaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-danger"><i class='bx bx-x-circle'></i></a>
+                              </td>
+                          </tr>
                         @endforeach      
                     </tbody>
                 </table>
