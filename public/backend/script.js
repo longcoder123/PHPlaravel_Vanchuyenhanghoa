@@ -71,4 +71,5 @@ window.onload = function () {
 		switchMode.checked = true; // Thiết lập checkbox nếu chế độ tối được lưu
 	}
 	applyPageLoadSettings(); // Đặt các thiết lập ban đầu
+	return false;
 };

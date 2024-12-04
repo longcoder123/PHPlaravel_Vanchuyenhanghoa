@@ -27,7 +27,7 @@
                     <div class="row mb-3">
                         <div class="col">
                             <div class="alert alert-info">
-                                10038 và LE17RJ là những kết quả phù hợp nhất mà chúng tôi tìm được. Nếu thấy không đúng, bạn có thể thay đổi trong các trường ở trên.
+                               
                             </div>
                         </div>
                     </div>

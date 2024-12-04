@@ -29,13 +29,15 @@
                        "positionClass": "toast-top-center", // Căn giữa phía trên
                    }
 
-                   @if (session('editxe'))
-                       toastr.success("{{ session('editxe') }}");
+                   @if (session('editnv'))
+                       toastr.success("{{ session('editnv') }}");
+                   @endif
+                   @if (session('error'))
+                       toastr.success("{{ session('error') }}");
                    @endif
 
-                   @if ($errors->any())
-                       toastr.error("{{ $errors->first('biensoxe') }}");
-                   @endif
+
+               
                </script>
 
                 <div class="card">
@@ -74,9 +76,9 @@
                             <div class="form-group">
                                 <label for="trangthai">Trạng thái nhân viên</label>
                                 <select name="trangthai" class="form-control">
-                                    <option value="Có sẵn" {{ $driver->status == 'Có sẵn' ? 'selected' : '' }}>Sẵn sàng</option>
-                                    <option value="Đang sử dụng" {{ $driver->status == 'Đang sử dụng' ? 'selected' : '' }}>Đang giao hàng</option>
-                                    <option value="Đang bảo trì" {{ $driver->status == 'Đang bảo trì' ? 'selected' : '' }}>Nghỉ phép</option>
+                                    <option value="Sẵn sàng" {{ $driver->status == 'Sẵn sàng' ? 'selected' : '' }}>Sẵn sàng</option>
+                                    <option value="Đang giao hàng" {{ $driver->status == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
+                                    <option value="Nghỉ phép" {{ $driver->status == 'Nghỉ phép' ? 'selected' : '' }}>Nghỉ phép</option>
                                 </select>
                             </div>
 

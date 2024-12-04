@@ -57,17 +57,17 @@
                         @csrf
                              <div class="form-group mb-3">
                                  <label for="">Tên :</label>
-                                 <input type="text" name="tennv" id="" class="form-control">
+                                 <input type="text" name="tennv" id="" class="form-control" placeholder="Nhập tên nhân viên">
                              </div>
                 
                              <div class="form-group mb-3">
                                  <label for="">Số Điện Thoại :</label>
-                                 <input type="text" name="sodienthoai" id="" class="form-control">
+                                 <input type="text" name="sodienthoai" id="" class="form-control" placeholder="Số điện thoại">
                              </div>
                              
                              <div class="form-group mb-3">
                                  <label for="">Ảnh :</label>
-                                 <input type="file" name="anhdaidien" id="" class="form-control">
+                                 <input type="file" name="anhdaidien" id="" class="form-control" >
                              </div>
                              <div class="form-group mb-3">
                                  <label for="">Email :</label>
@@ -85,12 +85,14 @@
                                     <option value="Nghỉ phép">Nghỉ phép</option>
                                 </select>
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="maxe">Mã xe:</label>
+                                <select name="maxe" id="maxe" class="form-control">
+                                    <option value="">-- Chọn xe --</option>
+                                </select>
+                            </div>
                              <div class="form-group mb-3">
-                                 <label for="">Mã xe : </label>
-                                 <input type="text" name="maxe" id="" class="form-control">
-                             </div> 
-                             <div class="form-group mb-3">
-                                 <button type="submit" class="btn btn-primary"> Thêm </button>
+                                 <button type="submit" class="btn btn-primary">Thêm</button>
                              </div>
                          </form>    
                     </div>
@@ -99,6 +101,27 @@
         </div>
     </div>
      <!-- Latest compiled JavaScript -->
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>    
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>   
+     <!-- Thêm script AJAX để lấy dữ liệu xe -->
+<script>
+    $(document).ready(function () {
+        // Gửi request đến backend để lấy danh sách xe chưa được đăng ký
+        $.ajax({
+            url: "{{ route('available.vehicles') }}", // Đường dẫn lấy danh sách xe
+            type: "GET",
+            success: function (data) {
+                // Xử lý và hiển thị danh sách xe vào select box
+                let options = '<option value="">-- Chọn xe --</option>';
+                data.forEach(vehicle => {
+                    options += `<option value="${vehicle.vehicle_id}">${vehicle.license_plate}</option>`;
+                });
+                $('#maxe').html(options);
+            },
+            error: function () {
+                alert('Không thể tải danh sách xe. Vui lòng thử lại.');
+            }
+        });
+    });
+</script> 
 </body>
 </html>

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;  // Thêm dòng này để import model User
 
 class CustomerController extends Controller
 {
     public function khachang(){
-        return view("Backend.Customer.khachang");
+        $users = User::with('customer')->get();  // Lấy thông tin người dùng và thông tin khách hàng
+        return view("Backend.Customer.khachang", compact('users')); 
     }
 }

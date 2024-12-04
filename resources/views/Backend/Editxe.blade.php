@@ -65,9 +65,9 @@
                             <div class="form-group mb-3">
                                 <label for="">Trạng thái:</label>
                                 <select name="trangthai" class="form-control">
-                                    <option value="Có sẵn" {{ $vh->status == 'Có sẵn' ? 'selected' : '' }}>Sẵn sàng</option>
-                                    <option value="Đang sử dụng" {{ $vh->status == 'Đang sử dụng' ? 'selected' : '' }}>Đang giao hàng</option>
-                                    <option value="Đang bảo trì" {{ $vh->status == 'Đang bảo trì' ? 'selected' : '' }}>Nghỉ phép</option>
+                                    <option value="Có sẵn" {{ $vh->status == 'Có sẵn' ? 'selected' : '' }}>Có sẵn</option>
+                                    <option value="Đang sử dụng" {{ $vh->status == 'Đang sử dụng' ? 'selected' : '' }}>Đang sử dụng </option>
+                                    <option value="Đang bảo trì" {{ $vh->status == 'Đang bảo trì' ? 'selected' : '' }}>Bảo trì</option>
                                 </select>
                             </div>
                             

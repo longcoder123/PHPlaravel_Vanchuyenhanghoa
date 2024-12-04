@@ -57,28 +57,35 @@ class VehicleController extends Controller
         return view('Backend.Editxe', compact('vh'));
     }
     public function update(Request $request, $vehicle_id) {
-       // Kiểm tra sự tồn tại của license_plate trong bảng Vehicles
-        $request->validate([
-            'biensoxe' => 'required|unique:vehicles,license_plate',
-            'loaixe' => 'required',
-            'trongluong' => 'required|numeric',
-            'trangthai' => 'required'
-        ], [
-            'biensoxe.unique' => 'Biển số xe đã tồn tại!',
-        ]);
-
         // Tìm xe theo vehicle_id
         $vh = Vehicle::find($vehicle_id);
         if (!$vh) {
             return redirect()->back()->with('error', 'Xe không tồn tại');
         }
-
+    
+        // Kiểm tra sự tồn tại của license_plate trong bảng Vehicles (chỉ khi biển số xe thay đổi)
+        $rules = [
+            'loaixe' => 'required',
+            'trongluong' => 'required|numeric',
+            'trangthai' => 'required',
+        ];
+    
+        // Chỉ kiểm tra unique nếu biển số xe thay đổi
+        if ($request->input('biensoxe') !== $vh->license_plate) {
+            $rules['biensoxe'] = 'required|unique:vehicles,license_plate';
+        }
+    
+        // Validate dữ liệu
+        $request->validate($rules, [
+            'biensoxe.unique' => 'Biển số xe đã tồn tại!',
+        ]);
+    
         // Cập nhật các trường
         $vh->license_plate = $request->input('biensoxe');
         $vh->vehicle_type = $request->input('loaixe');
         $vh->capacity = $request->input('trongluong');
         $vh->status = $request->input('trangthai');
-
+    
         // Xử lý ảnh
         if ($request->hasFile('anhdaidien')) {
             // Xóa ảnh cũ nếu có
@@ -86,7 +93,7 @@ class VehicleController extends Controller
             if (File::exists($anhcu)) {
                 File::delete($anhcu);
             }
-
+    
             // Lưu ảnh mới
             $file = $request->file('anhdaidien');
             $extention = $file->getClientOriginalExtension();
@@ -94,12 +101,13 @@ class VehicleController extends Controller
             $file->move('Uploads/admin', $fillname);
             $vh->vehicle_image = $fillname; // Cập nhật tên ảnh
         }
-
+    
         // Lưu thông tin đã cập nhật
         $vh->save(); // Sử dụng save() thay vì update()
-
+    
         return redirect()->back()->with('editxe', 'Sửa thông tin thành công');
     }
+    
 
 
     // xóa xe
