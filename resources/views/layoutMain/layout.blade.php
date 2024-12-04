@@ -27,6 +27,34 @@
             background-color: #f58220;
             color: white;
         }
+        .upload-box {
+  width: 100%;
+  height: 150px;
+  border: 1px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload-box i {
+  font-size: 24px;
+  color: #888;
+}
+
+.img-thumbnail {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+.file-input-main{
+    width: 300px;
+}
+.hidden {
+  display: none;
+}
+
+
     </style>
   </head>
   <body>

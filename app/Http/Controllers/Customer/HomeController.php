@@ -19,9 +19,10 @@ class HomeController extends Controller
          return view("layoutMain.userPage.customerInformation");
         //return view("layoutMain.userPage.detailPackage");
     }
+
     public function calculate(Request $request)
     {
-
+        // $this->validate_infor($request);
         // $hanhdong=$this->checkProvince($request);
         // if($hanhdong){
         $distance = $request->input('quangduong');
