@@ -39,12 +39,13 @@
                         @foreach($vh as $sp)  
                           <tr>
                               <td><img src="{{asset('Uploads/admin/' .$sp ->vehicle_image )}}">
-                                <p>{{$sp->license_plate}}</p></td>
-                              <td>{{$sp->vehicle_type}}</td>
-                              <td>{{$sp->capacity}} Tấn</td>
-                              <td>{{$sp->status}}</td>  
+                                </td>
+                                <td class="text-center">{{$sp->license_plate}}</td>
+                              <td class="text-center">{{$sp->vehicle_type}}</td>
+                              <td class="text-center">{{$sp->capacity}} Tấn</td>
+                              <td class="text-center">{{$sp->status}}</td>  
                               {{-- <td>{{$sp->driver_id ->name}}</td>                        --}}
-                              <td>
+                              <td class="text-center">
                                   <a href="{{route('suaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-primary"><i class='bx bxs-edit'></i></a>
                                   <a href="{{route('xoaxe',['vehicle_id' => $sp->vehicle_id])}}" class="btn btn-danger"><i class='bx bx-x-circle'></i></a>
                               </td>

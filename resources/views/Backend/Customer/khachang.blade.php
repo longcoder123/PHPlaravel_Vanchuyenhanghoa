@@ -33,7 +33,6 @@
                         <tr>
                             
                             <th>Tên </th>
-             
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
                             <th>CCCD</th>
@@ -44,22 +43,24 @@
                         </tr>
                     </thead>
                     <tbody>
+                   @foreach ($khachang as $kh)
+                   <tr>
+                    <td>{{$kh->name}}</td>
+                    <td>{{$kh->phone}}</td> 
+                    <td>{{$kh->address}}</td>
+                    <td>{{$kh->identity_number}}</td>
+                    <td>{{$kh->gender}}</td>                        
+           
+                    <td ><a href="{{route('backend.order')}}" style="text-decoration: none"><i class='bx bx-folder'></i> chi tiết</a></td>
+                    <td>{{$kh->customer_id}}</td>
+                    <td>
+                        <a href="" class="btn btn-primary" style="text-decoration: none"><i class='bx bxs-edit'></i></a>
+                        <a href="" class="btn btn-danger" style="text-decoration: none"><i class='bx bx-x-circle'></i></a>
+                    </td>
+                </tr>
+                       
+                   @endforeach
                    
-                          <tr>
-                              <td><img src="">
-                                <p>Nguyễn Văn A</p></td>
-                      
-                              <td>012345678</td>
-                              <td>Hai bà trưng - Hà Nội</td>
-                              <td>03132132133</td>                        
-                              <td>Nam</td> 
-                              <td ><a href="{{route('backend.order')}}" style="text-decoration: none"><i class='bx bx-folder'></i> chi tiết</a></td>
-                              <td>1</td>
-                              <td>
-                                  <a href="" class="btn btn-primary" style="text-decoration: none"><i class='bx bxs-edit'></i></a>
-                                  <a href="" class="btn btn-danger" style="text-decoration: none"><i class='bx bx-x-circle'></i></a>
-                              </td>
-                          </tr>
                     
                       </tbody>
                 </table>

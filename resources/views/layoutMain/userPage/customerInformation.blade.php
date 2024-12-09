@@ -14,17 +14,12 @@
                             <input type="text" id="from" name="from" class="form-control" placeholder="Nhập địa chỉ gửi" oninput="fetchLocationSuggestions(this.value, 'from-suggestions',0)">
                             <div id="from-suggestions" class="suggestions"></div>
                         </div>
-                        @error('from')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
+
                         <div class="col-md-12 mb-3">
                             <label for="to" class="form-label">Tới*</label>
                             <input type="text" id="to" name="to" class="form-control" placeholder="Nhập địa chỉ nhận" oninput="fetchLocationSuggestions(this.value, 'to-suggestions',1)">
                             <div id="to-suggestions" class="suggestions"></div>
                         </div>
-                        @error('to')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
                     </div>
                     <input type="hidden" id="quangduong" name="quangduong">
                     <input type="hidden" id="tongtien" name="tongtien">
@@ -55,14 +50,14 @@
                     <div class="row mb-3">
                         <div class="col-md-3 mb-3">
                             <label for="quantity" class="form-label">Gói hàng*</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" min="0" value="0">
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1">
                         </div>
                         <div class="row mb-3">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="weight" class="form-label">Trọng lượng gói hàng*</label>
                             <div class="input-group">
-                                <input type="number" id="weight" min="0" name="weight" class="form-control" value="0">
+                                <input type="number" id="weight" name="weight" class="form-control" value="1">
                                 <select class="form-select" name="weight_unit">
                                     <option value="lb" selected>lb</option>
                                     <option value="kg">kg</option>
@@ -72,9 +67,9 @@
                         <div class="col-md-6 mb-3">
                             <label for="dimensions" class="form-label">Kích thước D x R x C*</label>
                             <div class="input-group">
-                                <input type="number" name="length" min="0" value="0" class="form-control" placeholder="D">
-                                <input type="number" name="width" min="0" value="0" class="form-control" placeholder="R">
-                                <input type="number" name="height" min="0" value="0" class="form-control" placeholder="C">
+                                <input type="number" name="length" value="1" class="form-control" placeholder="D">
+                                <input type="number" name="width" value="1" class="form-control" placeholder="R">
+                                <input type="number" name="height" value="1" class="form-control" placeholder="C">
                                 <select class="form-select" name="dimension_unit">
                                     <option value="in" selected>in</option>
                                     <option value="cm">cm</option>
@@ -83,71 +78,78 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="position-a">
-                            @if (session('thongbaosoluong'))
-                            <div class="alert alert-danger">
-                                {{ session('thongbaosoluong') }}
+                            <div class="position-a">
+                                @if (session('thongbaosoluong'))
+                                <div class="alert alert-danger">
+                                    {{ session('thongbaosoluong') }}
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="position-a">
-                            @if (session('thongbaotrongluong'))
-                            <div class="alert alert-danger">
-                                {{ session('thongbaotrongluong') }}
+                        <div class="col">
+                            <div class="position-a">
+                                @if (session('thongbaotrongluong'))
+                                <div class="alert alert-danger">
+                                    {{ session('thongbaotrongluong') }}
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="position-a">
-                            @if (session('thongbaokichthuoc'))
-                            <div class="alert alert-danger">
-                                {{ session('thongbaokichthuoc') }}
+                        <div class="col">
+                            <div class="position-a">
+                                @if (session('thongbaokichthuoc'))
+                                <div class="alert alert-danger">
+                                    {{ session('thongbaokichthuoc') }}
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
-                    </div>
-                    <!-- <div class="container mt-3">
+                    {{-- // Ảnh     --}}
+                    <div class="container mt-3">
                         <label for="quantity" class="form-label">Ảnh hàng*</label>
                         <div class="row">
                             <div class="col-3">
                                 <div class="image-upload">
-                                    <label for="file-input-main" class="file-input-main">
+                                    <label for="file-input-1" class="file-input-main">
                                         <div class="upload-box">
                                             <i class="fas fa-plus"></i>
                                         </div>
                                     </label>
-                                    <input class="col-3" id="file-input-main" type="file" accept="image/*" style="display:none;" onchange="addImage()">
+                                    <input class="col-3" id="file-input-1" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 1)" name="package_image[]">
                                 </div>
+                                <img id="preview-1" src="#" alt="Ảnh 1" style="display:none;" class="img-thumbnail" onclick="editImage(1)">
+                                <input type="hidden" id="image-1" name="package_image[]">
                             </div>
 
-
-                            <div class="col-3" id="image-slot-1">
+                            <div class="col-3">
                                 <div class="image-upload">
-                                    <img id="preview-1" src="#" alt="Ảnh 1" style="display:none;" class="img-thumbnail" onclick="editImage(1)">
+                                    <label for="file-input-2" class="file-input-main">
+                                        <div class="upload-box">
+                                            <i class="fas fa-plus"></i>
+                                        </div>
+                                    </label>
+                                    <input class="col-3" id="file-input-2" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 2)" name="package_image[]">
                                 </div>
+                                <img id="preview-2" src="#" alt="Ảnh 2" style="display:none;" class="img-thumbnail" onclick="editImage(2)">
+                                <input type="hidden" id="image-2" name="package_image[]">
                             </div>
 
-                            <div class="col-3" id="image-slot-2">
+                            <div class="col-3">
                                 <div class="image-upload">
-                                    <img id="preview-2" src="#" alt="Ảnh 2" style="display:none;" class="img-thumbnail" onclick="editImage(2)">
+                                    <label for="file-input-3" class="file-input-main">
+                                        <div class="upload-box">
+                                            <i class="fas fa-plus"></i>
+                                        </div>
+                                    </label>
+                                    <input class="col-3" id="file-input-3" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 3)" name="package_image[]">
                                 </div>
-                            </div>
-
-                            <div class="col-3" id="image-slot-3">
-                                <div class="image-upload">
-                                    <img id="preview-3" src="#" alt="Ảnh 3" style="display:none;" class="img-thumbnail" onclick="editImage(3)">
-                                </div>
+                                <img id="preview-3" src="#" alt="Ảnh 3" style="display:none;" class="img-thumbnail" onclick="editImage(3)">
+                                <input type="hidden" id="image-3" name="package_image[]">
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="product-images" name="product_images" value=""> -->
 
 
-                    <label for="images">Upload Images:</label>
-                    <input type="file" name="images[]" id="images" multiple>
                     <!-- Shipping Date -->
                     <div class="row mb-4">
                         <div class="col-md-12 mb-3">
@@ -158,14 +160,14 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="position-a">
-                            @if (session('thongbaongay_gui'))
-                            <div class="alert alert-danger">
-                                {{ session('thongbaongay_gui') }}
+                            <div class="position-a">
+                                @if (session('thongbaongay_gui'))
+                                <div class="alert alert-danger">
+                                    {{ session('thongbaongay_gui') }}
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
-                    </div>
                     <!-- Submit Button -->
                     @if(session('error'))
                     <div class="alert alert-danger">
@@ -186,23 +188,23 @@
 
                     </div>
                     <div class="col">
-                        <div class="position-a">
-                            @if (session('thongbaoten'))
-                            <div class="alert alert-danger">
-                                {{ session('thongbaoten') }}
+                            <div class="position-a">
+                                @if (session('thongbaoten'))
+                                <div class="alert alert-danger">
+                                    {{ session('thongbaoten') }}
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="position-a">
-                            @if (session('thongbaosdt'))
-                            <div class="alert alert-danger">
-                                {{ session('thongbaosdt') }}
+                        <div class="col">
+                            <div class="position-a">
+                                @if (session('thongbaosdt'))
+                                <div class="alert alert-danger">
+                                    {{ session('thongbaosdt') }}
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
-                    </div>
                     <!-- @if(session('success'))
                     <div class="alert alert-success text-center">
                         {{ session('success') }}
@@ -227,7 +229,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
-<script>
+{{-- <script>
     function isNumber(event) {
         const char = String.fromCharCode(event.which);
         return /^[0-9]$/.test(char); // Chỉ cho phép ký tự số
@@ -236,8 +238,6 @@
     let editingImageIndex = null; // Biến để theo dõi ảnh nào đang được sửa
 
     // Hàm này sẽ được gọi khi chọn ảnh mới
-    let imagePaths = []; // Mảng chứa đường dẫn ảnh
-
     function addImage() {
         const input = document.getElementById('file-input-main');
         const file = input.files[0];
@@ -250,14 +250,12 @@
             if (editingImageIndex !== null) {
                 // Nếu đang sửa một ảnh
                 document.getElementById(`preview-${editingImageIndex}`).src = e.target.result;
-                imagePaths[editingImageIndex - 1] = e.target.result; // Cập nhật đường dẫn trong mảng
                 document.getElementById(`preview-${editingImageIndex}`).style.display = 'block';
                 editingImageIndex = null;
             } else if (imageIndex < 3) {
                 // Nếu chưa chọn đủ 3 ảnh
                 imageIndex++;
                 document.getElementById(`preview-${imageIndex}`).src = e.target.result;
-                imagePaths.push(e.target.result); // Thêm đường dẫn vào mảng
                 document.getElementById(`preview-${imageIndex}`).style.display = 'block';
             } else {
                 alert('Bạn chỉ được thêm tối đa 3 ảnh.');
@@ -272,11 +270,7 @@
         editingImageIndex = index;
         document.getElementById('file-input-main').click(); // Mở hộp thoại để chọn ảnh mới
     }
-
-    function updateImageInput() {
-        document.getElementById('product-images').value = JSON.stringify(imagePaths);
-    }
-</script>
+</script> --}}
 <script>
     let timeoutId;
 
@@ -411,4 +405,34 @@
         document.getElementById("buttonThanhToan").style.display = "block";
     }
 </script>
+{{-- Thêm ảnh  --}}
+
+<script>
+    // Hàm để thêm ảnh vào slot
+    function addImage(event, slot) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Hiển thị ảnh trong slot tương ứng
+                const previewImage = document.getElementById('preview-' + slot);
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+
+                // Lưu base64 của ảnh vào input hidden để gửi lên server
+                document.getElementById('image-' + slot).value = e.target.result;
+            }
+            reader.readAsDataURL(file);  // Đọc ảnh dưới dạng base64
+        }
+    }
+
+    // Hàm để chọn lại ảnh
+    function editImage(slot) {
+        const fileInput = document.getElementById('file-input-' + slot);
+        fileInput.click();  // Mở hộp thoại chọn file
+    }
+</script>
+
 @endsection

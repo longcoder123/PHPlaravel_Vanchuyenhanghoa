@@ -12,20 +12,19 @@ class DetailPackagesController extends Controller
     public function ViewDetailOfUser(){
         // $orders = Order::with('packages')->get();
         $orders = Order::join('packages', 'orders.package_id', '=', 'packages.package_id')
-    ->select(
-        'orders.order_id',
-        'orders.status as order_status',
-        'packages.status as package_status',
-        'orders.receiver_name',
-        'orders.sender_address',
-        'orders.receiver_address',
-        'orders.delivery_date',
-        'orders.shipping_fee',
-        'orders.order_date as order_date'
-    )
-    ->where('packages.customer_id', '=', Auth::id())
-    ->get();
-
+        ->select(
+            'orders.order_id',
+            'orders.status as order_status',
+            'packages.status as package_status',
+            'orders.receiver_name',
+            'orders.sender_address',
+            'orders.receiver_address',
+            'orders.delivery_date',
+            'orders.shipping_fee',
+            'orders.order_date as order_date'
+        )
+        ->where('packages.customer_id', '=', Auth::id())
+        ->get();
     foreach ($orders as $order) {
         // Tính toán thời gian và phần trăm cho mỗi đơn hàng
         $orderDate = Carbon::parse($order->order_date);

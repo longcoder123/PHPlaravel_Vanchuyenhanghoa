@@ -68,8 +68,9 @@ Route::get('/infor', [HomeController::class, 'layoutInfor'])->name('infor');
 // Calculate Shipping Cost
 Route::post('/calculate-shipping-cost', [HomeController::class, 'calculate'])->name('calculateShippingCost');
 
-// Save Data (example for order)
-Route::post('/save-data', [oder::class, 'checkProvince'])->name('saveData');
+// Save Data (example for order - yêu cầu đăng nhập)
+// Route::middleware('auth')->post('/save-data', [oder::class, 'checkProvince'])->name('saveData');
+
 
 // Detail Package Route
 Route::get('/detail-package', [DetailPackagesController::class, 'ViewDetailOfUser'])->name('detailpackage');
@@ -81,7 +82,7 @@ Route::post('/complete-profile', [InforCustomerController::class, 'storeProfile'
 
 
 Route::middleware(['auth', 'check.customer.profile'])->group(function () {
-    Route::get('/', function () {
-        return view('layoutMain.userPage.home');  // Trang chủ
-    })->name('home');
+    // Ví dụ các route cần đăng nhập
+    Route::get('/infouser', [InforUserController::class, 'index'])->name('infouser');
+    Route::post('/save-data', [oder::class, 'checkProvince'])->name('saveData');
 });
