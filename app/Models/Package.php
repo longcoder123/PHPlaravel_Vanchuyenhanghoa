@@ -20,7 +20,6 @@ class Package extends Model
         'status',
         'created_at'
     ];
-
     protected $primaryKey = 'package_id';
     public $incrementing = true;
 }
