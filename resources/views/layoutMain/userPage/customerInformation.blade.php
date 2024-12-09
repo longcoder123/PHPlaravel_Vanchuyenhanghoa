@@ -1,6 +1,6 @@
 @extends('layoutMain.layout')
 @section('content')
-<form method="POST" id="calculateForm">
+<form method="POST" id="calculateForm" enctype="multipart/form-data">
     @csrf <!-- Laravel's CSRF protection -->
     <div class="container-fluid d-flex justify-content-center">
         <div class="custom-container">
@@ -104,40 +104,51 @@
                                 @endif
                             </div>
                         </div>
+                    {{-- // Ảnh     --}}
                     <div class="container mt-3">
                         <label for="quantity" class="form-label">Ảnh hàng*</label>
                         <div class="row">
                             <div class="col-3">
                                 <div class="image-upload">
-                                    <label for="file-input-main" class="file-input-main">
+                                    <label for="file-input-1" class="file-input-main">
                                         <div class="upload-box">
                                             <i class="fas fa-plus"></i>
                                         </div>
                                     </label>
-                                    <input class="col-3" id="file-input-main" type="file" accept="image/*" style="display:none;" onchange="addImage()">
+                                    <input class="col-3" id="file-input-1" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 1)" name="package_image[]">
                                 </div>
+                                <img id="preview-1" src="#" alt="Ảnh 1" style="display:none;" class="img-thumbnail" onclick="editImage(1)">
+                                <input type="hidden" id="image-1" name="package_image[]">
                             </div>
-
-                            <!-- Các cột chứa ảnh đã chọn -->
-                            <div class="col-3" id="image-slot-1">
+                    
+                            <div class="col-3">
                                 <div class="image-upload">
-                                    <img id="preview-1" src="#" alt="Ảnh 1" style="display:none;" class="img-thumbnail" onclick="editImage(1)">
+                                    <label for="file-input-2" class="file-input-main">
+                                        <div class="upload-box">
+                                            <i class="fas fa-plus"></i>
+                                        </div>
+                                    </label>
+                                    <input class="col-3" id="file-input-2" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 2)" name="package_image[]">
                                 </div>
+                                <img id="preview-2" src="#" alt="Ảnh 2" style="display:none;" class="img-thumbnail" onclick="editImage(2)">
+                                <input type="hidden" id="image-2" name="package_image[]">
                             </div>
-
-                            <div class="col-3" id="image-slot-2">
+                    
+                            <div class="col-3">
                                 <div class="image-upload">
-                                    <img id="preview-2" src="#" alt="Ảnh 2" style="display:none;" class="img-thumbnail" onclick="editImage(2)">
+                                    <label for="file-input-3" class="file-input-main">
+                                        <div class="upload-box">
+                                            <i class="fas fa-plus"></i>
+                                        </div>
+                                    </label>
+                                    <input class="col-3" id="file-input-3" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 3)" name="package_image[]">
                                 </div>
-                            </div>
-
-                            <div class="col-3" id="image-slot-3">
-                                <div class="image-upload">
-                                    <img id="preview-3" src="#" alt="Ảnh 3" style="display:none;" class="img-thumbnail" onclick="editImage(3)">
-                                </div>
+                                <img id="preview-3" src="#" alt="Ảnh 3" style="display:none;" class="img-thumbnail" onclick="editImage(3)">
+                                <input type="hidden" id="image-3" name="package_image[]">
                             </div>
                         </div>
                     </div>
+                    
 
                     <!-- Shipping Date -->
                     <div class="row mb-4">
@@ -218,7 +229,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
-<script>
+{{-- <script>
     function isNumber(event) {
         const char = String.fromCharCode(event.which);
         return /^[0-9]$/.test(char); // Chỉ cho phép ký tự số
@@ -259,7 +270,7 @@
         editingImageIndex = index;
         document.getElementById('file-input-main').click(); // Mở hộp thoại để chọn ảnh mới
     }
-</script>
+</script> --}}
 <script>
     let timeoutId;
 
@@ -394,4 +405,34 @@
         document.getElementById("buttonThanhToan").style.display = "block";
     }
 </script>
+{{-- Thêm ảnh  --}}
+
+<script>
+    // Hàm để thêm ảnh vào slot
+    function addImage(event, slot) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Hiển thị ảnh trong slot tương ứng
+                const previewImage = document.getElementById('preview-' + slot);
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+
+                // Lưu base64 của ảnh vào input hidden để gửi lên server
+                document.getElementById('image-' + slot).value = e.target.result;
+            }
+            reader.readAsDataURL(file);  // Đọc ảnh dưới dạng base64
+        }
+    }
+
+    // Hàm để chọn lại ảnh
+    function editImage(slot) {
+        const fileInput = document.getElementById('file-input-' + slot);
+        fileInput.click();  // Mở hộp thoại chọn file
+    }
+</script>
+
 @endsection
