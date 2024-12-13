@@ -81,7 +81,7 @@ table td, table th {
                         <td>{{$kh->identity_number}}</td>
                         <td>{{$kh->gender}}</td>
                         <td>
-                            <a href="{{ route('backend.orders', ['customer_id' => $kh->customer_id]) }}" style="text-decoration: none">
+                            <a href="{{ route('backend.orders', ['customer_id' => $kh->user_id]) }}" style="text-decoration: none">
                                 <i class='bx bx-folder'></i> chi tiết
                             </a>
                         </td>

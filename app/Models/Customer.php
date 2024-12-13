@@ -22,6 +22,6 @@ class Customer extends Model
      {
          return $this->hasMany(Order::class, 'customer_id'); 
      }
-    protected $primaryKey = 'customer_id';
+    protected $primaryKey = 'user_id';
     public $incrementing = true;
 }

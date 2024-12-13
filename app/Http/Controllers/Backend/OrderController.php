@@ -12,8 +12,9 @@ class OrderController extends Controller
     public function order($customer_id)
     {
         $customer = Customer::findOrFail($customer_id);
+        
         $orders = Order::where('customer_id', $customer_id)->get();
-
+      
         return view('Backend.Customer.Order', compact('orders', 'customer'));
     }
 
@@ -21,6 +22,8 @@ class OrderController extends Controller
     public function approveOrder($order_id)
     {
         $order = Order::findOrFail($order_id);
+        $order->order_date = now();
+        $order->delivery_date = now()->addDays(3);
         $order->status = 'Đang vận chuyển';
         $order->save();
         return redirect()->route('backend.orders', ['customer_id' => $order->customer_id])
