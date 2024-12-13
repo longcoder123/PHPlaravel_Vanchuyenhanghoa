@@ -33,8 +33,22 @@
                             <td>{{$order->receiver_address}}</td>
                             <td>{{$order->delivery_date}}</td>
                             <td>
-                                <button class="btn btn-sm btn-outline-danger cancel-btn">Hủy đơn</button>
-                                <button class="toggleButton" data-target="myDiv-{{ $order->order_id }}">Bấm để hiển thị/tắt</button>
+                                @if($order->order_status === 'Đã đặt')
+                                <form action="{{ route('orders.cancel', $order->order_id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-danger cancel-btn">Hủy đơn</button>
+                                </form>
+                                @else
+
+                                @if($order->order_status === 'Đang vận chuyển')
+                                <button class="toggleButton" data-target="myDiv-{{ $order->order_id }}">Thông tin vận chuyển</button>
+                                @else
+                                <Button>Đợi hoàn tiền</Button>
+                                @endif
+                                @endif
+
+
+
                             </td>
                         </tr>
                         @endforeach

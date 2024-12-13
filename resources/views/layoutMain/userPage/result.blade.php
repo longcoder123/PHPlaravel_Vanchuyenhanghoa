@@ -7,9 +7,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kết quả tính phí vận chuyển</h1>
-        <p>Tổng phí vận chuyển: {{ number_format($cost, 0, ',', '.') }} VND</p>
-        <a href="{{ url()->previous() }}">Quay lại</a>
+        <h1 class="text-sucess">Thanh toán thành công</h1>
+        <a href="/">Quay lại</a>
     </div>
 </body>
 </html>
