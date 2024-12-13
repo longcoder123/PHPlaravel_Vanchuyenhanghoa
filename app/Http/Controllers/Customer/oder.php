@@ -5,264 +5,437 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\driver;
-use App\Models\vehicle;
-use App\Models\User;
-use App\Notifications\NewOrderNotification;
+
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class oder extends Controller
 {
-    public function validate_infor($request){
-        $addressFrom = $request->input('from');
-        $addressTo = $request->input('to');
-        $packaging = $request->input('packaging');
-        $quantity = $request->input('quantity');
-        $weight = $request->input('weight');
-        $weightUnit = $request->input('weight_unit');
-        $length = $request->input('length');
-        $width = $request->input('width');
-        $height = $request->input('height');
-        $dimensionUnit = $request->input('dimension_unit');
-        $shippingDate = $request->input('shipping_date');
-        $recipientName = $request->input('recipien_name');
-        $recipientPhoneNumber = $request->input('recipient_phone_number');
-        // dd($recipientName);
-        if (is_null($addressFrom)) {
-            return redirect()->back()->with('thongbaoloidiachi', 'Bạn hãy điền đầy đủ địa chỉ gửi!');
-        }
-        if (is_null($addressTo)) {
-            return redirect()->back()->with('thongbaoloidiachi', 'Bạn hãy điền đầy đủ địa chỉ nhận!');
-        }
-        // if (empty($packaging)) {
-        //     return redirect()->back()->with('thongbaobao_bi', 'Bạn hãy chọn bao bì cho gói hàng!');
-        // }
+    public function viewResult(Request $request)
+    {
 
-        if (empty($quantity) || $quantity <= 0) {
-            return redirect()->back()->with('thongbaosoluong', 'Bạn hãy nhập số lượng gói hàng hợp lệ!');
+        // Lấy các tham số từ URL
+        $vnp_Amount = $request->query('vnp_Amount');
+        $vnp_BankCode = $request->query('vnp_BankCode');
+        $vnp_BankTranNo = $request->query('vnp_BankTranNo');
+        $vnp_OrderInfo = $request->query('vnp_OrderInfo');
+        $vnp_PayDate = $request->query('vnp_PayDate');
+        $vnp_ResponseCode = $request->query('vnp_ResponseCode');
+        $vnp_TmnCode = $request->query('vnp_TmnCode');
+        $vnp_TransactionNo = $request->query('vnp_TransactionNo');
+        $vnp_TransactionStatus = $request->query('vnp_TransactionStatus');
+        $vnp_TxnRef = $request->query('vnp_TxnRef');
+        $inputData = [
+            'vnp_Amount' => $vnp_Amount,
+            'vnp_BankCode' => $vnp_BankCode,
+            'vnp_BankTranNo' => $vnp_BankTranNo,
+            'vnp_OrderInfo' => $vnp_OrderInfo,
+            'vnp_PayDate' => $vnp_PayDate,
+            'vnp_ResponseCode' => $vnp_ResponseCode,
+            'vnp_TmnCode' => $vnp_TmnCode,
+            'vnp_TransactionNo' => $vnp_TransactionNo,
+            'vnp_TransactionStatus' => $vnp_TransactionStatus,
+            'vnp_TxnRef' => $vnp_TxnRef
+        ];
+
+        // Sắp xếp tham số theo thứ tự
+        ksort($inputData);
+        $hashData = http_build_query($inputData);
+        $vnp_SecureHash = $_GET['vnp_SecureHash'];
+        $hashDataReceived = $_GET; // hoặc từ POST, tùy theo cách bạn nhận dữ liệu
+
+        // Tạo lại chuỗi dữ liệu hash từ các tham số đã nhận (trừ vnp_SecureHash)
+        unset($hashDataReceived['vnp_SecureHash']);  // Loại bỏ vnp_SecureHash khỏi danh sách tham số
+        ksort($hashDataReceived);  // Sắp xếp các tham số theo thứ tự từ điển
+        $hashData = http_build_query($hashDataReceived);  // Tạo lại chuỗi dữ liệu để hash
+
+        // Tạo lại hash với khóa bảo mật
+        $secureHashSecret = "XNBCJFAKAZQSGTARRLGCHVZWCIOIGSHN"; // Thay bằng SECRET_KEY của bạn
+        $secureHashData = $hashData . '&vnp_SecureHashSecret=' . $secureHashSecret;
+        $secureHashCalculated = hash_hmac('sha512', $hashData, $secureHashSecret);  // Tạo lại mã hash
+
+
+        // dd($vnp_SecureHash,$secureHashCalculated);
+        // Kiểm tra xem hash có khớp không
+        if ($secureHashCalculated == $vnp_SecureHash) {
+            if ($vnp_ResponseCode == '00') {
+
+
+
+                $params = session('order_params');
+
+                if ($params) {
+                    // Lấy các giá trị từ session
+                    $userId = $params['user_id'];
+                    $weight = $params['weight'];
+                    $dimensions = $params['dimensions'];
+                    $totalPrice = $params['total_price'];
+                    $fromLocation = $params['from_location'];
+                    $toLocation = $params['to_location'];
+                    $recipientName = $params['recipient_name'];
+                    $recipientPhone = $params['recipient_phone'];
+                    $createdAt = $params['created_at'];
+                    $deliveryDate = $params['delivery_date'];
+                    $vehicleId = $params['vehicle_id'];
+                    $driverId = $params['driver_id'];
+                    $imageNames = $params['images'];
+
+
+                    $package = new \App\Models\Package();
+                    $package->customer_id = Auth::id();
+                    $package->description = 'Gói hàng tiêu chuẩn';
+                    $package->weight = $weight;
+                    $package->size = $dimensions;
+                    $package->value = $totalPrice;
+                    $package->status = 'Đang chờ xử lý';
+                    $package->product_image = $imageNames;
+                    $package->save();
+                    $order = new \App\Models\Order();
+                    $order->package_id = $package->package_id;
+                    $order->sender_address = $fromLocation;
+                    $order->receiver_name = $recipientName;
+                    $order->receiver_phone = $recipientPhone;
+                    $order->receiver_address = $toLocation;
+                    $order->order_date = now();
+                    $order->delivery_date = now()->addDays(3);
+                    $order->vehicle_id = $vehicleId;
+                    $order->driver_id = $driverId;
+                    $order->shipping_fee = $totalPrice;
+                    $order->status = 'Đã đặt';
+                    $order->save();
+
+                    $driver = Driver::where('driver_id', $driverId)->first();
+                    $driver->status = 'Đang giao hàng';
+                    $driver->save();
+
+                    $payment_id = intval(str_replace('.', '', uniqid(time(), true)));
+                    $payment = new Payment();
+                    $payment->payment_id = $payment_id;
+                    $payment->order_id = $order->order_id; // Đảm bảo orderId là giá trị bạn muốn
+                    $payment->payment_method = 'Chuyển khoản'; // Ví dụ phương thức thanh toán
+                    $payment->amount = $totalPrice; // Số tiền thanh toán
+                    $payment->status = 'Đã thanh toán'; // Trạng thái thanh toán
+
+
+                    // Lưu đối tượng Payment vào cơ sở dữ liệu
+                    $payment->save();
+                } else {
+                    return redirect()->route('error.page')->with('error', 'Không có thông tin thanh toán');
+                }
+            } else {
+                // Giao dịch thất bại
+                // Xử lý giao dịch thất bại nếu cần thiết
+            }
+        } else {
+            // Hash không hợp lệ
+            // Xử lý lỗi nếu cần thiết, log lỗi hoặc thông báo
         }
 
-        if (empty($weight) || $weight <= 0) {
-            return redirect()->back()->with('thongbaotrongluong', 'Bạn hãy nhập trọng lượng hợp lệ cho gói hàng!');
+        // Trả về kết quả cho người dùng
+        return view('layoutMain.userPage.result', [
+            'vnp_Amount' => $vnp_Amount,
+            'vnp_ResponseCode' => $vnp_ResponseCode
+        ]);
+    }
+    public function validate_infor($request, $error)
+    {
+        $errors = [];
+
+        $address = $request->input('from');
+        $province = $this->getProvince($address);
+        if ($error === 1) {
+            $errors['thongbaohetxe'] = 'Địa điểm giao hàng hiện tại không còn xe !';
+        }
+        if ($error === 2) {
+            $errors['thongbaohetxe'] = 'Địa điểm giao hàng hiện tại không còn xe !';
+        }
+        if ($province === Null) {
+            $errors['thongbaongoaiphamvi'] = 'Phạm vi địa chỉ ngoại quốc !';
+        }
+        if (is_null($request->input('from'))) {
+            $errors['thongbaoloidiachi'] = 'Bạn hãy điền đầy đủ địa chỉ gửi!';
+        }
+        if (is_null($request->input('to'))) {
+            $errors['thongbaoloidiachi'] = 'Bạn hãy điền đầy đủ địa chỉ nhận!';
+        }
+        if (empty($request->input('quantity')) || $request->input('quantity') <= 0) {
+            $errors['thongbaosoluong'] = 'Bạn hãy nhập số lượng gói hàng hợp lệ!';
+        }
+        if (empty($request->input('weight')) || $request->input('weight') <= 0) {
+            $errors['thongbaotrongluong'] = 'Bạn hãy nhập trọng lượng hợp lệ cho gói hàng!';
+        }
+        if (
+            empty($request->input('length')) || $request->input('length') <= 0 ||
+            empty($request->input('width')) || $request->input('width') <= 0 ||
+            empty($request->input('height')) || $request->input('height') <= 0
+        ) {
+            $errors['thongbaokichthuoc'] = 'Bạn hãy nhập kích thước hợp lệ cho gói hàng!';
+        }
+        if (empty($request->input('shipping_date'))) {
+            $errors['thongbaongay_gui'] = 'Bạn hãy chọn ngày gửi hàng!';
+        }
+        if (empty($request->input('recipien_name'))) {
+            $errors['thongbaoten'] = 'Bạn hãy nhập tên người nhận!';
+        }
+        if (empty($request->input('recipient_phone_number')) || !is_numeric($request->input('recipient_phone_number'))) {
+            $errors['thongbaosdt'] = 'Bạn hãy nhập số điện thoại hợp lệ cho người nhận!';
         }
 
-        if (empty($length) || $length <= 0 || empty($width) || $width <= 0 || empty($height) || $height <= 0) {
-            return redirect()->back()->with('thongbaokichthuoc', 'Bạn hãy nhập kích thước hợp lệ cho gói hàng!');
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
         }
+        return true;
+    }
 
-        if (empty($shippingDate)) {
-            return redirect()->back()->with('thongbaongay_gui', 'Bạn hãy chọn ngày gửi hàng!');
-        }
-
-        if (empty($recipientName)) {
-            return redirect()->back()->with('thongbaoten', 'Bạn hãy nhập tên người nhận!');
-        }
-        if (empty($recipientPhoneNumber) || !is_numeric($recipientPhoneNumber)) {
-            return redirect()->back()->with('thongbaosdt', 'Bạn hãy nhập số điện thoại hợp lệ cho người nhận!');
-        }
-         // Kiểm tra ảnh (nếu có)
-        // if ($request->hasFile('package_image') && !$request->file('package_image')->isValid()) {
-        //     return redirect()->back()->with('thongbaoanh', 'Có lỗi khi tải ảnh lên!');
-        // }
-        
-        }
     public function checkProvince(Request $request)
     {
-        
-        $validationResult = $this->validate_infor($request);
-        if ($validationResult) {
-            return $validationResult; // Trả về redirect nếu có lỗi
+
+
+
+
+        $validationResult = $this->validate_infor($request, 0);
+
+        if ($validationResult !== true) {
+            return $validationResult;
         }
+
+        // if ($province) {
         $address = $request->input('from');
-        if(is_null($address)){
-            return redirect()->back()->with('thongbaoloidiachi', 'Bạn hãy điền đầy đủ địa chỉ !');
-        }
         $province = $this->getProvince($address);
-    
-        if ($province) {
-            $provinceString = implode(', ', $province);
-            $licenseCodes = config("province_license.$provinceString");
-            
-            if ($licenseCodes) {
-                // $vehicle = vehicle::where([['license_plate', 'LIKE', '89' . '%'],['status','=','Có sẵn']])
-                //         ->get()->first();
+        $provinceString = implode(', ', $province);
+        $licenseCodes = config("province_license.$provinceString");
 
-                $vehicle = DB::table('vehicles')
-                    ->join('drivers', 'vehicles.vehicle_id', '=', 'drivers.vehicle_id')
-                    ->where('drivers.status', 'Sẵn sàng')
-                    ->where(function ($query) use ($licenseCodes) {
-                        // Gộp tất cả các điều kiện LIKE trong một closure
-                        foreach ($licenseCodes as $value) {
+        if ($licenseCodes) {
 
-                            $query->orWhere('vehicles.license_plate', 'like', $value . '%');
-                        }
-                    });
-                $driver_vehicle = $vehicle->select('vehicles.*', 'drivers.*')
-                    ->first();
-                
-                if (is_null($driver_vehicle)) {
-                    // Nếu không có dữ liệu, hiển thị thông báo
-                    // return response()->json([
-                    //     'message' => 'Địa điểm giao hàng hiện tại không còn xe',
-                    // ]);
-                    return redirect()->back()->with('thongbaohetxe', 'Địa điểm giao hàng hiện tại không còn xe');
+            $vehicle = DB::table('vehicles')
+                ->join('drivers', 'vehicles.vehicle_id', '=', 'drivers.vehicle_id')
+                ->where('drivers.status', 'Sẵn sàng')
+                ->where(function ($query) use ($licenseCodes) {
+                    foreach ($licenseCodes as $value) {
+
+                        $query->orWhere('vehicles.license_plate', 'like', $value . '%');
+                    }
+                });
+            $driver_vehicle = $vehicle->select('vehicles.*', 'drivers.*')
+
+                ->first();
+
+            if (is_null($driver_vehicle)) {
+                $validationResult = $this->validate_infor($request, 1);
+                if ($validationResult !== true) {
+                    return $validationResult;
                 }
+            }
+            $imageNames = [];  // Mảng lưu trữ các đường dẫn ảnh
 
-            // Ảnh 
-          // Kiểm tra các thông tin đã nhập
-                $validationResult = $this->validate_infor($request);
-                if ($validationResult) {
-                    return $validationResult; // Trả về redirect nếu có lỗi
-                }
-
-                // Lấy thông tin từ request
-                $data = $request->all();
-
-                // Kiểm tra và lưu ảnh
-                $imageNames = [];
-          // Kiểm tra nếu có tệp ảnh
-                if ($request->hasFile('package_image')) {
-                    // Nếu là mảng các tệp, xử lý từng tệp
-                    if (is_array($request->file('package_image'))) {
-                        foreach ($request->file('package_image') as $image) {
-                            // Kiểm tra nếu tệp là hợp lệ
-                            if ($image->isValid()) {
-                                // Tạo tên file cho ảnh
-                                $imageName = time() . '_' . $image->getClientOriginalName();
-
-                                // Lưu ảnh vào thư mục public/storage/Uploads/admin
-                                $imagePath = $image->storeAs('Uploads/admin', $imageName, 'public');
-
-                                // Lưu đường dẫn ảnh vào mảng
-                                $imageNames[] = $imagePath;
-                            } else {
-                                return redirect()->back()->with('thongbaoanh', 'Có lỗi khi tải ảnh lên!');
-                            }
-                        }
-                    } else {
-                        // Nếu chỉ có một tệp, xử lý nó
-                        $image = $request->file('package_image');
+            if ($request->hasFile('package_image')) {
+                if (is_array($request->file('package_image'))) {
+                    // Xử lý nhiều ảnh
+                    foreach ($request->file('package_image') as $image) {
                         if ($image->isValid()) {
+                            // Đặt đường dẫn thư mục lưu ảnh
+                            $destinationPath = public_path('Uploads/Admin');
+                            // Đặt tên ảnh, có thể là thời gian và tên gốc của ảnh
                             $imageName = time() . '_' . $image->getClientOriginalName();
-                            $imagePath = $image->move('Uploads/admin', $imageName);
-                            $imageNames[] = $imagePath;
+                            // Dùng move() để di chuyển ảnh vào thư mục đích
+                            $imagePath = $image->move($destinationPath, $imageName);
+                            // Thêm đường dẫn vào mảng
+                            $imageNames[] = $imagePath;  // Lưu đường dẫn ảnh vào mảng
                         } else {
                             return redirect()->back()->with('thongbaoanh', 'Có lỗi khi tải ảnh lên!');
                         }
                     }
                 } else {
-                    // Nếu không có ảnh nào được tải lên
-                    dd('No images uploaded');
+                    // Xử lý nếu chỉ có một ảnh
+                    $image = $request->file('package_image');
+                    if ($image->isValid()) {
+                        // Đặt tên ảnh và đường dẫn lưu trữ
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $imagePath = $image->move(public_path('Uploads/Admin'), $imageName);
+                        // Thêm đường dẫn vào mảng
+                        $imageNames[] = $imagePath;
+                    } else {
+                        return redirect()->back()->with('thongbaoanh', 'Có lỗi khi tải ảnh lên!');
+                    }
                 }
 
-                
-                // Lưu gói hàng vào cơ sở dữ liệu
-                $tongtien = str_replace('.', '', $data['tongtien']);
-                $package = new \App\Models\Package();
-                $package->customer_id = Auth::id();
-                $package->description = 'Gói hàng tiêu chuẩn';
-                $package->weight = $data['weight'];
-                $package->size = $data['length'] . 'x' . $data['width'] . 'x' . $data['height'];
-                $package->value =$tongtien;
-                $package->status = 'Đang chờ xử lý';
-                $package->product_image = implode(',', $imageNames); // Lưu tên các ảnh
-                $package->save();
+                // Kiểm tra nếu có ảnh
+                if (!empty($imageNames)) {
+                    // Lấy tên ảnh thay vì đường dẫn đầy đủ
+                    $imageNames = array_map(function ($imagePath) {
+                        return basename($imagePath); // Lấy tên ảnh thay vì đường dẫn đầy đủ
+                    }, $imageNames);
+                    // Chuyển mảng $imageNames thành chuỗi, sử dụng dấu phẩy để phân cách
+                    $imagePathsString = implode(',', $imageNames);
 
-                // Tạo đơn hàng mới
-                   // Lấy ID người dùng đã đăng nhập
-                  $userId = Auth::id();
-
-                // Tìm customer tương ứng với user
-                $customer = Customer::where('user_id', $userId)->first();
-
-                 if (!$customer) {
-                   return response()->json(['error' => 'Không tìm thấy khách hàng.'], 404);
-                 }
-                $customerId = $customer->customer_id;
-
-                $order = new \App\Models\Order();
-                $order->package_id = $package->package_id;
-                $order->customer_id = $customerId; 
-                $order->sender_address = $data['from'];
-                $order->receiver_name = $data['recipien_name'];
-                $order->receiver_phone = $data['recipient_phone_number'];
-                $order->receiver_address = $data['to'];
-                $order->order_date = now();
-                $order->delivery_date = now()->addDays(3);
-                $order->vehicle_id = $driver_vehicle->vehicle_id;
-                $order->driver_id = $driver_vehicle->driver_id;
-                $order->shipping_fee = $tongtien;
-                $order->status = 'Đã đặt';
-                $order->save();
-
-                
-               // Gửi thông báo cho admin
-                $adminUsers = User::where('is_admin', '1')->get(); // Lọc admin dựa trên cột 'is_admin'
-                foreach ($adminUsers as $admin) {
-                    $admin->notify(new NewOrderNotification($order));
+                } else {
+                    return redirect()->back()->with('thongbaoanh', 'Không có ảnh nào được tải lên!');
                 }
 
-                return response()->json(['message' => 'Đơn hàng đã được tạo thành công']);
-                // return ("Lưu Thành Công :)");
             } else {
-                // return response()->json([
-                //     'message' => "Không tìm thấy thông tin biển số cho tỉnh $province",
-                // ]);
-                return redirect()->back()->with('thongbaoloidiachi', 'Không tìm thấy thông tin biển số cho tỉnh $province.');
+                return redirect()->back()->with('thongbaoanh', 'Không có ảnh nào được tải lên!');
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            $data = $request->all();
+            $tongtien = str_replace('.', '', $data['tongtien']);
+
+            if (isset($_POST['redirect'])) {
+                $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+                $vnp_Returnurl = "http://127.0.0.1:8000/thanks";
+                $params = [
+                    'user_id' => Auth::id(),
+                    'weight' => $data['weight'],
+                    'dimensions' => $data['length'] . 'x' . $data['width'] . 'x' . $data['height'],
+                    'total_price' => $tongtien,
+                    'images' => implode(',', $imageNames),
+                    'from_location' => $data['from'],
+                    'to_location' => $data['to'],
+                    'recipient_name' => $data['recipien_name'],
+                    'recipient_phone' => $data['recipient_phone_number'],
+                    'created_at' => now(),
+                    'delivery_date' => now()->addDays(3),
+                    'vehicle_id' => $driver_vehicle->vehicle_id,
+                    'driver_id' => $driver_vehicle->driver_id,
+                ];
+
+                session(['order_params' => $params]);
+
+
+                session()->save(); // Đảm bảo session được lưu trước khi chuyển hướng
+                $vnp_TmnCode = "CGXZLS0Z"; //Mã website tại VNPAY
+                $vnp_HashSecret = "XNBCJFAKAZQSGTARRLGCHVZWCIOIGSHN"; //Chuỗi bí mật
+
+                $vnp_TxnRef = rand(00, 9999); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã nàysang VNPAY
+                $vnp_OrderInfo = "Noi dung thanh toan";
+                $vnp_OrderType = "billpayment";
+                $vnp_Amount = $tongtien * 100;
+                $vnp_Locale = "vn";
+                $vnp_BankCode = "NCB";
+                $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+                $inputData = array(
+                    "vnp_Version" => "2.1.0",
+                    "vnp_TmnCode" => $vnp_TmnCode,
+                    "vnp_Amount" => $vnp_Amount,
+                    "vnp_Command" => "pay",
+                    "vnp_CreateDate" => date('YmdHis'),
+                    "vnp_CurrCode" => "VND",
+                    "vnp_IpAddr" => $vnp_IpAddr,
+                    "vnp_Locale" => $vnp_Locale,
+                    "vnp_OrderInfo" => $vnp_OrderInfo,
+                    "vnp_OrderType" => $vnp_OrderType,
+                    "vnp_ReturnUrl" => $vnp_Returnurl,
+                    "vnp_TxnRef" => $vnp_TxnRef,
+                );
+                if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+                    $inputData['vnp_BankCode'] = $vnp_BankCode;
+                }
+                ksort($inputData);
+                $query = "";
+                $i = 0;
+                $hashdata = "";
+                foreach ($inputData as $key => $value) {
+                    if ($i == 1) {
+                        $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+                    } else {
+                        $hashdata .= urlencode($key) . "=" . urlencode($value);
+                        $i = 1;
+                    }
+                    $query .= urlencode($key) . "=" . urlencode($value) . '&';
+                }
+
+                $vnp_Url = $vnp_Url . "?" . $query;
+                if (isset($vnp_HashSecret)) {
+                    $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
+                    $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+                }
+
+                $returnData = array(
+                    'code' => '00',
+                    'message' => 'success',
+                    'data' => $vnp_Url
+                );
+                if (isset($_POST['redirect'])) {
+                    header('Location: ' . $vnp_Url);
+                    die();
+                } else {
+
+                    $tongtien = str_replace('.', '', $data['tongtien']);
+                    $package = new \App\Models\Package();
+                    $package->customer_id = Auth::id();
+                    $package->description = 'Gói hàng tiêu chuẩn';
+                    $package->weight = $data['weight'];
+                    $package->size = $data['length'] . 'x' . $data['width'] . 'x' . $data['height'];
+                    $package->value = $tongtien;
+                    $package->status = 'Đang chờ xử lý';
+                    //    $package->product_image = implode(',', $imageNames);
+                    $package->save();
+                    $order = new \App\Models\Order();
+                    $order->package_id = $package->package_id;
+                    $order->sender_address = $data['from'];
+                    $order->receiver_name = $data['recipien_name'];
+                    $order->receiver_phone = $data['recipient_phone_number'];
+                    $order->receiver_address = $data['to'];
+                    $order->order_date = now();
+                    $order->delivery_date = now()->addDays(3);
+                    $order->vehicle_id = $driver_vehicle->vehicle_id;
+                    $order->driver_id = $driver_vehicle->driver_id;
+                    $order->shipping_fee = $tongtien;
+                    $order->status = 'Đã đặt';
+                    $order->save();
+                    return ("Lưu Thành Công :)");
+                    echo json_encode($returnData);
+                }
+            }
+        } else {
+            $validationResult = $this->validate_infor($request, 2);
+            if ($validationResult !== true) {
+                return $validationResult;
             }
         }
-
-        return redirect()->back()->with('thongbaoloidiachi', 'Phạm vi địa chỉ ngoại quốc !');
+        // }
+        // return redirect()->back()->with('thongbaoloidiachi', 'Phạm vi địa chỉ ngoại quốc !');
     }
+
     private function getProvince($address)
-{
-    // Kiểm tra nếu địa chỉ chứa Hà Nội
-    if (preg_match('/Hà Nội,\s*Việt Nam$/i', $address)) {
-        return [
-            'name' => 'Hà Nội',
-        ];
-    }
+    {
+        if (preg_match('/Hà Nội,\s*Việt Nam$/i', $address)) {
+            return [
+                'name' => 'Hà Nội',
+            ];
+        }
+        if (preg_match('/Thừa Thiên Huế,\s*Việt Nam$/i', $address)) {
+            return [
+                'name' => 'Huế',
+            ];
+        }
+        if (preg_match('/(?:Thành phố|Tỉnh|Province)\s*([A-Za-zÀ-ỹ\s]+)/i', $address, $matches)) {
+            $name = trim($matches[1] ?? '');
+            $knownCities = ['Hà Nội', 'Thành phố Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'];
 
-    // Kiểm tra nếu địa chỉ chứa Thừa Thiên Huế
-    if (preg_match('/Thừa Thiên Huế,\s*Việt Nam$/i', $address)) {
-        return [
-            'name' => 'Huế',
-        ];
-    }
-
-    // Kiểm tra nếu địa chỉ chứa Thành phố hoặc Tỉnh
-    if (preg_match('/(?:Thành phố|Tỉnh|Province)\s*([A-Za-zÀ-ỹ\s]+)/i', $address, $matches)) {
-        $name = trim($matches[1] ?? '');
-
-        // Danh sách các thành phố lớn cần xử lý đặc biệt
-        $knownCities = ['Hà Nội', 'Thành phố Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'];
-
-        if (in_array($name, $knownCities)) {
-            if (stripos($address, 'Thành phố Hồ Chí Minh') !== false) {
+            if (in_array($name, $knownCities)) {
+                if (stripos($address, 'Thành phố Hồ Chí Minh') !== false) {
+                    return [
+                        'name' => 'Hồ Chí Minh',
+                    ];
+                }
                 return [
-                    'name' => 'Hồ Chí Minh',
+                    'name' => $name,
                 ];
             }
             return [
                 'name' => $name,
             ];
         }
-        return [
-            'name' => $name,
-        ];
+        if (preg_match('/(?:District|Huyện|Quận),?\s*([A-Za-zÀ-ỹ\s]+)\s*Province/i', $address, $matches)) {
+            $name = trim($matches[1] ?? '');
+            return [
+                'name' => $name,
+            ];
+        }
+        return null;
     }
-
-    // Kiểm tra nếu địa chỉ chứa District và Province
-    if (preg_match('/(?:District|Huyện|Quận),?\s*([A-Za-zÀ-ỹ\s]+)\s*Province/i', $address, $matches)) {
-        $name = trim($matches[1] ?? '');
-        return [
-            'name' => $name,
-        ];
-    }
-
-    // Nếu không tìm thấy, trả về null
-    return null;
-}
-
 }

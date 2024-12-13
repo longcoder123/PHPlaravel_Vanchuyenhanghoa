@@ -21,7 +21,7 @@
                       @csrf
                       <button type="submit" class="btn btn-secondary">Đăng xuất</button>
                   </form>
-                  
+
                   </a></li>
               </ul>
           @else
@@ -31,7 +31,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="{{ route('login') }}">Đăng nhập</a></li>
-          
+
               </ul>
           @endif
         </div>
