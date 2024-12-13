@@ -47,21 +47,21 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::post('/update-nv/{driver_id}', [DriverController::class, 'update'])->name('updatenv');
     Route::get('/delete-nv/{driver_id}', [DriverController::class, 'delete'])->name('xoanv');
 
-    // Quản lý tài khoản 
+    // Quản lý tài khoản
     Route::get('/qltk',[UserController::class, 'User'])->name('qltk');
 });
 
-// Login Routes 
+// Login Routes
 Route::get('/login', [LoginUserController::class, 'index'])->name('login');
-Route::post('/login', [LoginUserController::class, 'login'])->name('userlogin');  
+Route::post('/login', [LoginUserController::class, 'login'])->name('userlogin');
 Route::post('/register', [LoginUserController::class, 'register'])->name('register.process');
 Route::post('/logout', [LoginUserController::class, 'logout'])->name('logout');
 
-// InfoUser 
+// InfoUser
 Route::get('/infouser', [InforUserController::class, 'index'])->name('infouser');
 Route::post('/infouser', [InforUserController::class, 'update'])->name('updateInfouser');
 
-// Frontend Routes 
+// Frontend Routes
 Route::get('/', [HomeController::class, 'layoutHome'])->name('home');
 Route::get('/infor', [HomeController::class, 'layoutInfor'])->name('infor');
 
@@ -74,12 +74,14 @@ Route::post('/calculate-shipping-cost', [HomeController::class, 'calculate'])->n
 
 // Detail Package Route
 Route::get('/detail-package', [DetailPackagesController::class, 'ViewDetailOfUser'])->name('detailpackage');
+Route::post('/orders/{id}/cancel', [DetailPackagesController::class, 'cancel'])->name('orders.cancel');
 
 
 // TEST
 Route::get('/complete-profile', [InforCustomerController::class, 'showProfileForm'])->name('complete-profile-form');
 Route::post('/complete-profile', [InforCustomerController::class, 'storeProfile'])->name('complete-profile');
 
+Route::get('/thanks', [oder::class, 'viewResult'])->name('thanks');
 
 Route::middleware(['auth', 'check.customer.profile'])->group(function () {
     // Ví dụ các route cần đăng nhập

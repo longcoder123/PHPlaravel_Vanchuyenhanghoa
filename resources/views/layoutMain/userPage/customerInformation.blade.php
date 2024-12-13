@@ -1,7 +1,7 @@
 @extends('layoutMain.layout')
 @section('content')
 <form method="POST" id="calculateForm" enctype="multipart/form-data">
-    @csrf <!-- Laravel's CSRF protection -->
+    @csrf
     <div class="container-fluid d-flex justify-content-center">
         <div class="custom-container">
             <div class="col-12 custom-bg-cl-box h-auto p-3 mt-5">
@@ -11,53 +11,31 @@
                     <div class="row mb-3">
                         <div class="col-md-12 mb-3">
                             <label for="from" class="form-label">Từ*</label>
-                            <input type="text" id="from" name="from" class="form-control" placeholder="Nhập địa chỉ gửi" oninput="fetchLocationSuggestions(this.value, 'from-suggestions',0)">
+                            <input type="text" id="from" name="from" class="form-control" placeholder="Nhập địa chỉ gửi" required oninput="fetchLocationSuggestions(this.value, 'from-suggestions',0)">
                             <div id="from-suggestions" class="suggestions"></div>
                         </div>
 
                         <div class="col-md-12 mb-3">
                             <label for="to" class="form-label">Tới*</label>
-                            <input type="text" id="to" name="to" class="form-control" placeholder="Nhập địa chỉ nhận" oninput="fetchLocationSuggestions(this.value, 'to-suggestions',1)">
+                            <input type="text" id="to" name="to" class="form-control" placeholder="Nhập địa chỉ nhận" required oninput="fetchLocationSuggestions(this.value, 'to-suggestions',1)">
                             <div id="to-suggestions" class="suggestions"></div>
                         </div>
                     </div>
                     <input type="hidden" id="quangduong" name="quangduong">
                     <input type="hidden" id="tongtien" name="tongtien">
-
-                    <!-- Address Confirmation -->
-                    <div class="row mb-3">
-                        <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaohetxe'))
-                                <div class="alert alert-warning">
-                                    {{ session('thongbaohetxe') }}
-                                </div>
-                                @endif
-                            </div>
-                            <div class="position-a">
-                                @if (session('thongbaoloidiachi'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaoloidiachi') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Package Information -->
                     <h5>Cho chúng tôi biết thêm về lô hàng của bạn</h5>
 
                     <div class="row mb-3">
                         <div class="col-md-3 mb-3">
                             <label for="quantity" class="form-label">Gói hàng*</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1">
+                            <input type="number" id="quantity" required name="quantity" class="form-control" value="1">
                         </div>
                         <div class="row mb-3">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="weight" class="form-label">Trọng lượng gói hàng*</label>
                             <div class="input-group">
-                                <input type="number" id="weight" name="weight" class="form-control" value="1">
+                                <input type="number" id="weight" name="weight" required class="form-control" value="1">
                                 <select class="form-select" name="weight_unit">
                                     <option value="lb" selected>lb</option>
                                     <option value="kg">kg</option>
@@ -67,9 +45,9 @@
                         <div class="col-md-6 mb-3">
                             <label for="dimensions" class="form-label">Kích thước D x R x C*</label>
                             <div class="input-group">
-                                <input type="number" name="length" value="1" class="form-control" placeholder="D">
-                                <input type="number" name="width" value="1" class="form-control" placeholder="R">
-                                <input type="number" name="height" value="1" class="form-control" placeholder="C">
+                                <input type="number" name="length" required value="1" class="form-control" placeholder="D">
+                                <input type="number" name="width" required value="1" class="form-control" placeholder="R">
+                                <input type="number" name="height" required value="1" class="form-control" placeholder="C">
                                 <select class="form-select" name="dimension_unit">
                                     <option value="in" selected>in</option>
                                     <option value="cm">cm</option>
@@ -77,34 +55,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaosoluong'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaosoluong') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaotrongluong'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaotrongluong') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaokichthuoc'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaokichthuoc') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    {{-- // Ảnh     --}}
                     <div class="container mt-3">
                         <label for="quantity" class="form-label">Ảnh hàng*</label>
                         <div class="row">
@@ -115,10 +65,10 @@
                                             <i class="fas fa-plus"></i>
                                         </div>
                                     </label>
-                                    <input class="col-3" id="file-input-1" type="file" accept="image/*" style="display:none;" onchange="addImage(event, 1)" name="package_image[]">
+                                    <input class="col-3" id="file-input-1"  type="file" accept="image/*" style="display:none;" onchange="addImage(event, 1)" name="package_image[]">
                                 </div>
-                                <img id="preview-1" src="#" alt="Ảnh 1" style="display:none;" class="img-thumbnail" onclick="editImage(1)">
-                                <input type="hidden" id="image-1" name="package_image[]">
+                                <img id="preview-1" src="#" alt="Ảnh 1"  style="display:none;" class="img-thumbnail" onclick="editImage(1)">
+                                <input type="hidden"  id="image-1" name="package_image[]">
                             </div>
 
                             <div class="col-3">
@@ -151,79 +101,44 @@
 
 
                     <!-- Shipping Date -->
-                    <div class="row mb-4">
-                        <div class="col-md-12 mb-3">
-                            <label for="shipping-date" class="form-label">Bạn muốn gửi hàng khi nào?*</label>
-                            <select id="shipping-date" name="shipping_date" class="form-select">
-                                <option selected>Thứ Bảy, 21 tháng 9, 2024</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaongay_gui'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaongay_gui') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    <!-- Submit Button -->
-                    @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                    @endif
                     <h5>Thông tin người nhận hàng hóa</h5>
                     <div class="row mb-4 mt-3">
                         <div class="col-md-5 mb-3">
                             <label for="shipping-date" class="form-label">Nhập họ và tên*</label>
-                            <input type="text" name="recipien_name" class="form-control" placeholder="Họ và tên người nhận">
+                            <input type="text" name="recipien_name" class="form-control" required placeholder="Họ và tên người nhận">
                         </div>
 
                         <div class="col-md-5 mb-3">
                             <label for="shipping-date" class="form-label">Nhập số điện thoại*</label>
-                            <input type="text" name="recipient_phone_number" class="form-control" placeholder="Số điện thoại người nhận" onkeypress="return isNumber(event)">
+                            <input type="text" name="recipient_phone_number" class="form-control" placeholder="Số điện thoại người nhận" required onkeypress="return isNumber(event)">
                         </div>
 
                     </div>
-                    <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaoten'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaoten') }}
-                                </div>
-                                @endif
-                            </div>
+                    <div class="position-a">
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <div class="col">
-                            <div class="position-a">
-                                @if (session('thongbaosdt'))
-                                <div class="alert alert-danger">
-                                    {{ session('thongbaosdt') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    <!-- @if(session('success'))
-                    <div class="alert alert-success text-center">
-                        {{ session('success') }}
+                        @endif
                     </div>
-                    @endif -->
-
                     <div id="resultMessage" class="mt-3 text-center"></div>
                     <div class="row mb-3 ">
                         <div class="col text-center">
                             <button id="calculateButton" onclick="showThanhToan()" class="btn btn-primary">Hiển thị giá</button>
                         </div>
                         <div class="col text-center">
-                            <button formaction="{{ route('saveData') }}" id="buttonThanhToan" class="btn btn-primary" style="display: none;">Thanh Toán</button>
+                            <button formaction="{{ route('saveData') }}" id="buttonThanhToan" name="redirect" class="btn btn-primary" style="display: none;">Thanh toán tiền đặt cọc</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -232,12 +147,10 @@
 {{-- <script>
     function isNumber(event) {
         const char = String.fromCharCode(event.which);
-        return /^[0-9]$/.test(char); // Chỉ cho phép ký tự số
+        return /^[0-9]$/.test(char);
     }
-    let imageIndex = 0; // Biến để theo dõi vị trí hình ảnh hiện tại để thêm
-    let editingImageIndex = null; // Biến để theo dõi ảnh nào đang được sửa
-
-    // Hàm này sẽ được gọi khi chọn ảnh mới
+    let imageIndex = 0;
+    let editingImageIndex = null;
     function addImage() {
         const input = document.getElementById('file-input-main');
         const file = input.files[0];
@@ -248,12 +161,10 @@
 
         reader.onload = function(e) {
             if (editingImageIndex !== null) {
-                // Nếu đang sửa một ảnh
                 document.getElementById(`preview-${editingImageIndex}`).src = e.target.result;
                 document.getElementById(`preview-${editingImageIndex}`).style.display = 'block';
                 editingImageIndex = null;
             } else if (imageIndex < 3) {
-                // Nếu chưa chọn đủ 3 ảnh
                 imageIndex++;
                 document.getElementById(`preview-${imageIndex}`).src = e.target.result;
                 document.getElementById(`preview-${imageIndex}`).style.display = 'block';
@@ -264,11 +175,9 @@
 
         reader.readAsDataURL(file);
     }
-
-    // Hàm này sẽ được gọi khi nhấp vào một ảnh để sửa
     function editImage(index) {
         editingImageIndex = index;
-        document.getElementById('file-input-main').click(); // Mở hộp thoại để chọn ảnh mới
+        document.getElementById('file-input-main').click();
     }
 </script> --}}
 <script>
@@ -288,11 +197,9 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 const data = await response.json();
                 const suggestionBox = document.getElementById(suggestionBoxId);
                 suggestionBox.innerHTML = '';
-
                 data.forEach((location) => {
                     const div = document.createElement('div');
                     div.textContent = location.display_name;
@@ -327,7 +234,6 @@
                             calculateDistance(window.selectedLocations[0], window.selectedLocations[1]);
 
                         }
-
                     };
                     suggestionBox.appendChild(div);
                 });
@@ -367,33 +273,25 @@
 
     $(document).ready(function() {
         $('#calculateButton').click(function(e) {
-            e.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
-
-            // Lấy dữ liệu từ form
+            e.preventDefault();
             var formData = $('#calculateForm').serialize();
-
-            // Gửi yêu cầu AJAX đến server để tính toán
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{ route('calculateShippingCost') }}", // Thay thế bằng URL xử lý trên Laravel
+                url: "{{ route('calculateShippingCost') }}",
                 method: 'POST',
                 data: formData,
                 success: function(response) {
-                    // Kiểm tra xem yêu cầu có thành công không
                     if (response.success) {
-                        // Nếu thành công, hiển thị chi phí
                         $('#resultMessage').html('<div class="alert alert-success">Chi phí là: ' + response.costFormatted + ' VND</div>');
                         document.getElementById('tongtien').value = response.costFormatted;
                     } else {
-                        // Nếu không thành công, hiển thị thông báo lỗi
                         $('#resultMessage').html('<div class="alert alert-danger">' + response.error + '</div>');
                     }
                     $('#resultMessage').show();
                 },
                 error: function(xhr, status, error) {
-                    // Hiển thị thông báo lỗi nếu có vấn đề trong quá trình xử lý
                     $('#resultMessage').html('<div class="alert alert-danger">Có lỗi xảy ra, vui lòng thử lại.</div>');
                     $('#resultMessage').show();
                 }
@@ -405,34 +303,26 @@
         document.getElementById("buttonThanhToan").style.display = "block";
     }
 </script>
-{{-- Thêm ảnh  --}}
-
 <script>
-    // Hàm để thêm ảnh vào slot
     function addImage(event, slot) {
         const fileInput = event.target;
         const file = fileInput.files[0];
 
         if (file) {
             const reader = new FileReader();
-            reader.onload = function (e) {
-                // Hiển thị ảnh trong slot tương ứng
+            reader.onload = function(e) {
                 const previewImage = document.getElementById('preview-' + slot);
                 previewImage.src = e.target.result;
                 previewImage.style.display = 'block';
-
-                // Lưu base64 của ảnh vào input hidden để gửi lên server
                 document.getElementById('image-' + slot).value = e.target.result;
             }
-            reader.readAsDataURL(file);  // Đọc ảnh dưới dạng base64
+            reader.readAsDataURL(file);
         }
     }
 
-    // Hàm để chọn lại ảnh
     function editImage(slot) {
         const fileInput = document.getElementById('file-input-' + slot);
-        fileInput.click();  // Mở hộp thoại chọn file
+        fileInput.click();
     }
 </script>
-
 @endsection
