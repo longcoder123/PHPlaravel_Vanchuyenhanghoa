@@ -25,11 +25,17 @@ Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('/backend/khachang', [CustomerController::class, 'khachang'])->name('backend.customer');
 
     // Quản lý đơn hàng
-    Route::get('/backend/donhang', [OrderController::class, 'order'])->name('backend.order');
+    Route::get('/khachhang/{customer_id}/orders', [OrderController::class, 'order'])->name('backend.orders');
+    // Duyệt đơn hàng
+    Route::get('/order/approve/{order_id}', [OrderController::class, 'approveOrder'])->name('backend.order.approve');
+    // Từ chối đơn hàng
+    Route::get('/order/reject/{order_id}', [OrderController::class, 'rejectOrder'])->name('backend.order.reject');
+    Route::get('/order/delete/{order_id}',[OrderController::class,'delete'])->name('xoadonhang');
 
-    // Quản lý gói hàng
-    Route::get('/backend/goihang', [PakagesController::class, 'goihang'])->name('backend.packages');
 
+    // Chi tiết gói hàng
+    Route::get('/backend/goihang/{order_id}', [PakagesController::class, 'orderDetails'])->name('backend.package.details');
+    
     // Quản lý xe
     Route::get('/qlixe', [VehicleController::class, 'qlxe'])->name('qlixe');
     Route::get('/Them-xe', [VehicleController::class, 'addxe'])->name('themxe');
@@ -49,6 +55,8 @@ Route::group(['middleware' => 'auth.admin'], function () {
 
     // Quản lý tài khoản 
     Route::get('/qltk',[UserController::class, 'User'])->name('qltk');
+
+    
 });
 
 // Login Routes 

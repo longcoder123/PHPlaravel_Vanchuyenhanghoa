@@ -37,8 +37,9 @@
                                             '{{ $us->customer ? $us->customer->gender : '' }}', 
                                             '{{ $us->customer ? $us->customer->dob : '' }}', 
                                             '{{ $us->customer ? $us->customer->identity_number : '' }}')">
-                                        <i class="fas fa-eye"></i> 
+                                        <i class='bx bxs-show'></i>
                                     </button>
+                                    <a href=""><i class='bx bx-user-x'></i></a>
                                 </td>
                             </tr>
                         @endforeach

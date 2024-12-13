@@ -1,7 +1,7 @@
 
     <div class="container-fluild p-4">
       <div class="col-12 d-flex">
-        <div class="col-2 align-self-center" style="font-weight: 200px"><a href="/" class="text-decoration-none text-white">Long FAST</a></div>
+        <div class="col-2 align-self-center" style="font-weight: 200px"><a href="/" class="text-decoration-none text-white"><i class='bx bxs-truck' style="font-size: 40px"></i>Long FAST</a></div>
         <div class="col-8 d-flex justify-content-around px-3 align-self-center">
           <a href="" style="text-decoration: none">Giới thiệu</a><a href="" style="text-decoration: none">Các dịch vụ</a
           ><a href="" style="text-decoration: none ">Tra cứu đơn hàng</a>
@@ -11,8 +11,8 @@
           @if (Auth::check())
               <!-- If the user is logged in, show avatar and name -->
               <a class="btn dropdown-toggle d-flex align-items-center" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="{{ Auth::user()->avatar }}" alt="User Avatar" class="rounded-circle" width="30" height="30">
-                  <span class="ms-2">{{ Auth::user()->name }}</span>
+                 
+                  <span style="color: aliceblue" class="ms-2">{{ Auth::user()->name }}</span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="{{route("infouser")}}">Thông tin</a></li>

@@ -18,7 +18,7 @@
                         @foreach($orders as $order)
                         <tr>
                             <td>
-                                {{$order->package_status}}
+                                {{$order->order_status}}
                                 <div id="myDiv-{{ $order->order_id }}" class="toggle-div" style="display: none;">
                                     <div>
                                         <p>Order ID: {{ $order->order_id }}</p>

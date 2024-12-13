@@ -1,5 +1,38 @@
 @extends('Backend.Trangchu')
 @section('main')
+<Style>
+    
+table th, table td {
+    font-size: 14px;
+}
+
+
+table th, table td {
+    text-align: center;
+}
+
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+table tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Đặt khoảng cách giữa các ô */
+table td, table th {
+    padding: 12px;
+}
+
+</Style>
     <main>
         <div class="head-title">
             <div class="left">

@@ -17,6 +17,11 @@ class Customer extends Model
      {
          return $this->belongsTo(User::class);
      }
+     // Định nghĩa quan hệ một đến nhiều với bảng orders
+     public function orders()
+     {
+         return $this->hasMany(Order::class, 'customer_id'); 
+     }
     protected $primaryKey = 'customer_id';
     public $incrementing = true;
 }

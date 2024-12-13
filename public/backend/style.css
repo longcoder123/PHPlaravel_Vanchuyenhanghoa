@@ -315,7 +315,7 @@ body {
 	overflow-y: auto;
 }
 #content main .head-title {
-	display: flex;
+	/* display: flex; */
 	align-items: center;
 	justify-content: space-between;
 	grid-gap: 16px;

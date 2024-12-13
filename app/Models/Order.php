@@ -11,6 +11,7 @@ class Order extends Model
 
     protected $fillable = [
         'order_id',
+        'customer_id',
         'package_id',
         'sender_address',
         'receiver_name',
@@ -25,7 +26,12 @@ class Order extends Model
     ];
     public function packages()
     {
-        return $this->belongsTo(Package::class, 'package_id', 'package_id'); 
+        return $this->hasMany(Package::class, 'package_id', 'package_id');
+    }
+    
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
     protected $primaryKey = 'order_id';
     public $incrementing = true;

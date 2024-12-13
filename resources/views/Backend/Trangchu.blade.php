@@ -101,12 +101,22 @@
         </form>
         <input type="checkbox" id="switch-mode" hidden>
         <label for="switch-mode" class="switch-mode"></label>
-        <a href="#" class="notification" style="text-decoration: none">
+        {{-- <a href="#" class="notification" style="text-decoration: none">
             <i class='bx bxs-bell'></i>
-            <span class="num">8</span>
+            <span class="num">{{ $notifications->count() }}</span>
         </a>
-            <img src="img/people.png">
-        </a>
+    
+        <!-- Dropdown hiển thị danh sách thông báo -->
+        <div class="notification-dropdown">
+            <ul>
+                @foreach ($notifications as $notification)
+                    <li>
+                        {{ $notification->data['message'] }}
+                        <small>Order ID: {{ $notification->data['order_id'] }}</small>
+                    </li>
+                @endforeach
+            </ul>
+        </div> --}}
     </nav>
     <!-- NAVBAR -->
 

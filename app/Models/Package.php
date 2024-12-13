@@ -22,5 +22,9 @@ class Package extends Model
     ];
 
     protected $primaryKey = 'package_id';
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
     public $incrementing = true;
 }

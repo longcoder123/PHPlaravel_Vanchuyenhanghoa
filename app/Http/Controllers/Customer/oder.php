@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\driver;
 use App\Models\vehicle;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -142,7 +145,7 @@ class oder extends Controller
                         $image = $request->file('package_image');
                         if ($image->isValid()) {
                             $imageName = time() . '_' . $image->getClientOriginalName();
-                            $imagePath = $image->storeAs('Uploads/admin', $imageName, 'public');
+                            $imagePath = $image->move('Uploads/admin', $imageName);
                             $imageNames[] = $imagePath;
                         } else {
                             return redirect()->back()->with('thongbaoanh', 'Có lỗi khi tải ảnh lên!');
@@ -167,8 +170,20 @@ class oder extends Controller
                 $package->save();
 
                 // Tạo đơn hàng mới
+                   // Lấy ID người dùng đã đăng nhập
+                  $userId = Auth::id();
+
+                // Tìm customer tương ứng với user
+                $customer = Customer::where('user_id', $userId)->first();
+
+                 if (!$customer) {
+                   return response()->json(['error' => 'Không tìm thấy khách hàng.'], 404);
+                 }
+                $customerId = $customer->customer_id;
+
                 $order = new \App\Models\Order();
                 $order->package_id = $package->package_id;
+                $order->customer_id = $customerId; 
                 $order->sender_address = $data['from'];
                 $order->receiver_name = $data['recipien_name'];
                 $order->receiver_phone = $data['recipient_phone_number'];
@@ -181,7 +196,15 @@ class oder extends Controller
                 $order->status = 'Đã đặt';
                 $order->save();
 
-                return ("Lưu Thành Công :)");
+                
+               // Gửi thông báo cho admin
+                $adminUsers = User::where('is_admin', '1')->get(); // Lọc admin dựa trên cột 'is_admin'
+                foreach ($adminUsers as $admin) {
+                    $admin->notify(new NewOrderNotification($order));
+                }
+
+                return response()->json(['message' => 'Đơn hàng đã được tạo thành công']);
+                // return ("Lưu Thành Công :)");
             } else {
                 // return response()->json([
                 //     'message' => "Không tìm thấy thông tin biển số cho tỉnh $province",
