@@ -94,6 +94,7 @@ class oder extends Controller
                     $package->product_image = $imageNames;
                     $package->save();
                     $order = new \App\Models\Order();
+                    $order->customer_id = Auth::id();
                     $order->package_id = $package->package_id;
                     $order->sender_address = $fromLocation;
                     $order->receiver_name = $recipientName;
@@ -174,9 +175,7 @@ class oder extends Controller
         ) {
             $errors['thongbaokichthuoc'] = 'Bạn hãy nhập kích thước hợp lệ cho gói hàng!';
         }
-        if (empty($request->input('shipping_date'))) {
-            $errors['thongbaongay_gui'] = 'Bạn hãy chọn ngày gửi hàng!';
-        }
+       
         if (empty($request->input('recipien_name'))) {
             $errors['thongbaoten'] = 'Bạn hãy nhập tên người nhận!';
         }
