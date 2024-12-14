@@ -58,13 +58,7 @@
             </a>
         </li>
         <li>
-            <a href="#" style="text-decoration: none">
-                <i class='bx bxs-car'></i>
-                <span class="text">Quá trình vận chuyển</span>
-            </a>
-        </li>
-        <li>
-            <a href="#" style="text-decoration: none">
+            <a href="{{route('thanhtoan')}}" style="text-decoration: none">
                 <i class='bx bxs-credit-card'></i>
                 <span class="text">Thanh toán đơn hàng</span>
             </a>

@@ -39,7 +39,12 @@
                                             '{{ $us->customer ? $us->customer->identity_number : '' }}')">
                                         <i class='bx bxs-show'></i>
                                     </button>
-                                    <a href=""><i class='bx bx-user-x'></i></a>
+                                 
+                                        <button class="btn btn-danger delete-btn" data-id="{{ $us->id }}">
+                                            <i class="bx bx-user-x"></i> 
+                                        </button>
+                                   
+                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -109,3 +114,31 @@
         document.getElementById('detail-identity_number').value = identity_number;
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('click', '.delete-btn', function() {
+        var userId = $(this).data('id');
+        
+        if (confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) {
+            $.ajax({
+                url: '{{ route('user.delete', ':id') }}'.replace(':id', userId),
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}',  
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message); 
+                        location.reload(); 
+                    } else {
+                        alert(response.message); 
+                    }
+                },
+                error: function() {
+                    alert('Đã xảy ra lỗi khi xóa tài khoản!');
+                }
+            });
+        }
+    });
+</script>
+

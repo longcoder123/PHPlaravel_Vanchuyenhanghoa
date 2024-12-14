@@ -8,6 +8,7 @@ use App\Http\Controllers\customer\HomeController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PakagesController;
+use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Customer\DetailPackagesController;
 use App\Http\Controllers\Customer\oder;
 use App\Http\Controllers\Login\LoginUserController;
@@ -55,6 +56,13 @@ Route::group(['middleware' => 'auth.admin'], function () {
 
     // Quản lý tài khoản
     Route::get('/qltk',[UserController::class, 'User'])->name('qltk');
+    Route::delete('/user/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
+
+
+    //Quản lý thanh toán 
+    Route::get('qltt',[PaymentController::class,'thanhtoan'])-> name('thanhtoan');
+    Route::post('/payment/refund/{id}', [PaymentController::class, 'refund'])->name('payment.refund');
+
 
     
 });

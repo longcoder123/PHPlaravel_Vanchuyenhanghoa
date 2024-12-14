@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Long FAST</title>
+    <title>FAST AND FURIOUS</title>
+    <link rel="icon" href="https://png.pngtree.com/png-vector/20210124/ourmid/pngtree-delivery-truck-silhouette-icon-design-template-vector-isolated-png-image_2801327.jpg" type="image/png" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"

@@ -69,7 +69,7 @@ table td, table th {
                         <th class="text-center">Giới tính</th>
                         <th class="text-center">Xem đơn hàng</th>
                         <th class="text-center">Id</th>
-                        <th class="text-center">Thao Tác</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -86,10 +86,6 @@ table td, table th {
                             </a>
                         </td>
                         <td>{{$kh->customer_id}}</td>
-                        <td>
-                            <a href="" class="btn btn-primary" style="text-decoration: none"><i class='bx bxs-edit'></i></a>
-                            <a href="" class="btn btn-danger" style="text-decoration: none"><i class='bx bx-x-circle'></i></a>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>

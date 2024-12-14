@@ -91,12 +91,12 @@
             <p class="col-12 px-3">Bạn muốn chuyển hàng nhưng không biết chỗ nào chuyển hàng giá cả hợp lý, bạn không biết phải giải quyết như thế nào? Bạn cần sự trợ giúp của những người có kinh nghiệm chuyển hàng an toàn, uy tín và chuyên nghiệp? Bạn bắt đầu tìm kiếm dịch vụ chuyển hàng gói nhưng vẫn chưa tìm ra giải pháp.Vậy bạn có thể liên hệ ngay với Vận Tải 24/7 – Chuyên cung cấp dịch vụ chuyển hàng trọn gói uy tín, chất lượng. Đến tận nơi khảo sát và báo giá cho bạn khi cần, kể cả ngày nghỉ, lễ.</p>
           </div>
           <div class="col-8 d-flex flex-wrap">
-            <div class="col-4"> <img src="" width="100%" height="306px" alt=""></div>
-            <div class="col-4"> <img src="" width="100%" height="306px" alt=""></div>
-            <div class="col-4"> <img src="" width="100%" height="306px" alt=""></div>
-            <div class="col-4"> <img src="" width="100%" height="306px" alt=""></div>
-            <div class="col-4"> <img src="" width="100%" height="306px" alt=""></div>
-            <div class="col-4"> <img src="" width="100%" height="306px" alt=""></div>
+            <div class="col-4"> <img src="https://indochinapost.vn/wp-content/uploads/2018/06/van-tai-nguyen-xe.jpg" width="100%" height="306px" alt=""></div>
+            <div class="col-4"> <img src="https://lh5.googleusercontent.com/proxy/PHd1cj-UM5fab_Fh70fEWqUNBoGBOZak1soeie6nX3cxSr5OfskhSoBH9r5YjZdQ-8EI3U0pRAgEgA11rNTDiyzCBS9UpOtBbwPYN0hhaBztLiuIr_4rZkoOT5ATU8U-1yumPsrRfRt_W_1l7wSyWqN2U-LeEgOCwyN1hjQbzZjV9CcisIRol8rJww" width="100%" height="306px" alt=""></div>
+            <div class="col-4"> <img src="https://channel.mediacdn.vn/2021/1/29/photo-3-16119097657112112470677.jpg" width="100%" height="306px" alt=""></div>
+            <div class="col-4"> <img src="https://g7taxi.vn/wp-content/uploads/2022/05/luu-y-khi-van-chuyen-hang-hoa-bang-xe-tai-1.jpg" width="100%" height="306px" alt=""></div>
+            <div class="col-4"> <img src="https://cdnphoto.dantri.com.vn/AYQthlv1eGQaz-463R8-sHNOav8=/thumb_w/960/2020/01/13/lalamove-pr-2-dantri-final-1-docx-1578895015576.jpeg" width="100%" height="306px" alt=""></div>
+            <div class="col-4"> <img src="https://trongtanvn.com/wp-content/uploads/2021/07/Xe-tai-giao-hang-3-e1653271007753.jpg" width="100%" height="306px" alt=""></div>
           </div>
         </div>
         <div class="col-12 d-flex align-items-center py-3 flex-wrap">
